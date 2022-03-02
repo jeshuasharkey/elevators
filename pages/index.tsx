@@ -3,7 +3,13 @@ import Head from 'next/head';
 import { useState } from 'react';
 
 const Home: NextPage = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    paymentOptions: [
+      {
+        sourceAmount: null,
+      },
+    ],
+  });
 
   // useEffect(() => {
   //   fetchData();
