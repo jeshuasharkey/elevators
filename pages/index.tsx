@@ -9,7 +9,7 @@ const Home: NextPage = () => {
   //   fetchData();
   // }, [])
 
-  const fetchData = (event) => {
+  const fetchData = (event: any) => {
     const requestOptions = {
       headers: {
         Accept: 'application/json',
