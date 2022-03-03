@@ -1,9 +1,8 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 const Home: NextPage = () => {
-  const [val, setVal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     paymentOptions: [
@@ -12,6 +11,7 @@ const Home: NextPage = () => {
       },
     ],
   });
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const fetchData = (val = 0) => {
     setLoading(true);
@@ -41,6 +41,11 @@ const Home: NextPage = () => {
       });
   };
 
+  const setNumber = (num: number) => {
+    fetchData(num);
+    if (inputRef && inputRef.current) inputRef.current.value = num.toString();
+  };
+
   return (
     <>
       <Head>
@@ -61,8 +66,8 @@ const Home: NextPage = () => {
           <path
             d='M100.342 6.83808C138.937 10.1444 177.895 5.34385 216.544 5.34385C230.923 5.34385 245.338 5.29386 259.689 6.83808C260.533 6.92891 271.33 8.14098 269.863 7.50218C262.468 4.28154 253.274 5.01758 245.789 4.59674C215.377 2.88689 184.925 2.52143 154.495 2.52143C116.355 2.52143 78.2106 3.24386 40.0725 3.84963C28.1721 4.03865 -7.46571 6.75521 4.37789 5.0118C39.1286 -0.103588 75.0674 3.15447 109.905 2.68745C129.919 2.41915 149.937 2.24431 169.952 2.3554C170.888 2.3606 183.514 0.932083 184.463 3.76662C184.811 4.80639 182.907 3.84963 182.128 3.84963C179.033 3.84963 175.938 3.84963 172.843 3.84963C158.573 3.84963 144.302 3.84963 130.032 3.84963C113.13 3.84963 96.2275 3.84963 79.3254 3.84963'
             stroke='white'
-            stroke-width='2'
-            stroke-linecap='round'
+            strokeWidth='2'
+            strokeLinecap='round'
           />
         </svg>
 
@@ -74,9 +79,9 @@ const Home: NextPage = () => {
             type='text'
             className='w-full bg-white/20 rounded-xl text-white px-6 focus:outline-none focus:b placeholder:opacity-20'
             placeholder='1000.00'
-            value={val}
+            ref={inputRef}
             onChange={(event) => {
-              fetchData(event.target.value);
+              fetchData(parseInt(event.target.value));
             }}
           />
           <div className='text-white absolute right-2 h-full flex items-center text-xs opacity-30'>
@@ -90,8 +95,7 @@ const Home: NextPage = () => {
                 key={num}
                 className='text-[14px] cursor-pointer py-[5px] px-[10px] rounded-md bg-white/10 font-normal text-white/50'
                 onClick={() => {
-                  fetchData(num);
-                  setVal(num);
+                  setNumber(num);
                 }}
               >
                 ${num}
