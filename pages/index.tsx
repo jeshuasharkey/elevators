@@ -76,13 +76,16 @@ const Home: NextPage = () => {
             $
           </div>
           <input
-            type='text'
-            className='w-full bg-white/20 rounded-xl text-white px-6 focus:outline-none focus:b placeholder:opacity-20'
+            className='w-full bg-white/20 rounded-xl text-white px-6 py-2 focus:outline-none focus:b placeholder:opacity-20'
             placeholder='1000.00'
             ref={inputRef}
             onChange={(event) => {
               fetchData(parseInt(event.target.value));
             }}
+            type='number'
+            min='0'
+            inputMode='numeric'
+            style={{ WebkitAppearance: 'none' }}
           />
           <div className='text-white absolute right-2 h-full flex items-center text-xs opacity-30'>
             USD
