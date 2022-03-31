@@ -32,6 +32,8 @@ const Home: NextPage = () => {
     fetch(`https://api.sandbox.transferwise.tech/v3/quotes/`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
+
         setData(data);
         setLoading(false);
       })
@@ -108,7 +110,8 @@ const Home: NextPage = () => {
         </div>
         {data?.paymentOptions && !loading && (
           <div className='text-white flex items-baseline gap-1 text-xl font-bold'>
-            ${data?.paymentOptions[0].sourceAmount}
+            $
+            {data?.paymentOptions[data?.paymentOptions.length - 1].sourceAmount}
             <div className='text-xs opacity-30'>NZD</div>
           </div>
         )}
