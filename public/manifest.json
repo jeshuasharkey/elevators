@@ -2,8 +2,8 @@
   "name": "Wise Calculator",
   "short_name": "Wise Calc",
   "start_url": "/",
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#202020",
+  "background_color": "#202020",
   "display": "standalone",
   "orientation": "portrait-primary",
   "icons": [

@@ -53,7 +53,7 @@ const Home: NextPage = () => {
       <Head>
         <link rel='manifest' href='manifest.json' />
       </Head>
-      <div className='bg-black/90 p-5 h-screen w-screen flex gap-4 items-center justify-center flex-col'>
+      <div className='bg-[#202020] p-5 h-screen w-screen flex gap-4 items-center justify-center flex-col'>
         <p className='text-lg text-center text-white leading-5 font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-red-600'>
           Check USD prices in NZD from Wise
         </p>
