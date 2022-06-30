@@ -94,7 +94,7 @@ const Home: NextPage = () => {
           </div>
         </div>
         <div className='flex gap-2'>
-          {[10, 50, 100, 2500].map((num) => {
+          {[100, 200, 2395].map((num) => {
             return (
               <div
                 key={num}
