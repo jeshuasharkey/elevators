@@ -10,14 +10,20 @@
     "server": "yarn build && NODE_ENV=production node server.js"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "clsx": "^1.2.1",
+    "framer-motion": "^6.5.1",
     "jotai": "^1.7.8",
+    "moment": "^2.29.4",
+    "mta-realtime-subway-departures": "^1.2.1",
     "next": "12.1.0",
     "next-offline": "^5.0.5",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-moment": "^1.1.2"
   },
   "devDependencies": {
+    "@types/moment": "^2.13.0",
     "@types/node": "17.0.21",
     "@types/react": "17.0.39",
     "autoprefixer": "^10.4.2",

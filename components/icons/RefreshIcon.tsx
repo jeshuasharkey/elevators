@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { SVGProps } from 'react';
 
-export default function RefreshIcon() {
+export default function RefreshIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       width='19'
@@ -8,6 +8,7 @@ export default function RefreshIcon() {
       viewBox='0 0 19 18'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
+      {...props}
     >
       <path
         d='M13.7598 6.42621H18.0009V2.06274'
