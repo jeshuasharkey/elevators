@@ -1,9 +1,9 @@
 {
-  "name": "Wise Calculator",
-  "short_name": "Wise Calc",
+  "name": "Elevators",
+  "short_name": "Elevators",
   "start_url": "/",
-  "theme_color": "#202020",
-  "background_color": "#202020",
+  "theme_color": "CB97C0",
+  "background_color": "CB97C0",
   "display": "standalone",
   "orientation": "portrait-primary",
   "icons": [
