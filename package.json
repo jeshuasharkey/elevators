@@ -1,5 +1,5 @@
 {
-  "name": "wise-calc",
+  "name": "elevators",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,8 @@
     "server": "yarn build && NODE_ENV=production node server.js"
   },
   "dependencies": {
+    "clsx": "^1.2.1",
+    "jotai": "^1.7.8",
     "next": "12.1.0",
     "next-offline": "^5.0.5",
     "react": "17.0.2",

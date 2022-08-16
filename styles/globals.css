@@ -17,7 +17,7 @@ a {
 @tailwind utilities;
 
 * {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'SF Pro Rounded', sans-serif;
   box-sizing: border-box;
 }
 

@@ -1,17 +1,20 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
+import Header from '../components/Header';
+import { dataAtom, favouritesAtom } from '../store/store';
 import { humanTimeAgo } from '../utils/human-time-ago';
+import { useAtom } from 'jotai';
+import SingleStation from '../components/SingleStation';
+import clsx from 'clsx';
 
 const Home: NextPage = () => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useAtom(dataAtom);
+  const [favourites] = useAtom(favouritesAtom);
   const inputRef = useRef<HTMLInputElement>(null);
   const [lastUpdate, setLastUpdate] = useState<any>();
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const [view, setView] = useState('full');
 
   const fetchData = (val = 0) => {
     setLoading(true);
@@ -24,15 +27,27 @@ const Home: NextPage = () => {
       }
     )
       .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
+      .then((data: any) => {
         setLastUpdate(Date.now());
-        setData(
-          data.filter(
-            (item: any) =>
-              item.station === 'Flushing Av' && item.equipmenttype === 'EL'
-          )
+        const reduce: any = data.reduce(
+          (ac: any, a: any) => ({ ...ac, [a.station]: a }),
+          {}
         );
+        const newData: any = {};
+        data.forEach((item: any) => {
+          const exsits = !!newData[item.station];
+          if (exsits) {
+            newData[item.station].equipment.push(item);
+          } else {
+            newData[item.station] = {
+              station: item.station,
+              borough: item.borough,
+              trainno: item.trainno,
+              equipment: [item],
+            };
+          }
+        });
+        setData(newData);
         setLoading(false);
       })
       .catch((error) => {
@@ -41,42 +56,35 @@ const Home: NextPage = () => {
       });
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
       <Head>
         <link rel='manifest' href='manifest.json' />
         <title>ELEVATORS</title>
       </Head>
-      <div className='bg-[#202020] p-5 h-screen w-screen text-white flex flex-col text-[12px]'>
+      <div className='bg-pink h-screen w-screen text-white flex flex-col text-[12px]'>
+        <Header />
+        <div
+          className={clsx(
+            'flex flex-1 w-screen overflow-scroll snap-x snap-mandatory',
+            view === 'list'
+          )}
+        >
+          {favourites.map((item) => (
+            <SingleStation
+              key={item}
+              item={data?.[item]}
+              size={view === 'list' ? 'small' : 'full'}
+            />
+          ))}
+        </div>
         {/* <pre className='text-[12px] font-extralight'>
           {JSON.stringify(data, null, 2)}
         </pre> */}
-        <div className='grid gap-3 flex-1 content-start'>
-          <div className='font-bold'>Flushing Ave (J)(M)</div>
-          {data.map((item: any, i) => (
-            <div className='' key={item.equipmentno}>
-              <div className=''>Elevator #{i + 1}</div>
-              <div className='capitalize'>{item.shortdescription}</div>
-              <div className=''>
-                status:{' '}
-                <span
-                  className={`font-bold inline-block ${
-                    item.isactive === 'Y' ? 'text-green-500' : 'text-red-500'
-                  }`}
-                >
-                  {item.isactive === 'Y' ? 'Active' : 'Out Of Service'}
-                </span>
-              </div>
-              {/* <div>{JSON.stringify(item, null, 2)}</div> */}
-            </div>
-          ))}
-        </div>
-        <div className=''>
-          <a onClick={() => fetchData()} className='underline cursor-pointer'>
-            Refresh
-          </a>
-          <div className=''>Last Updated {humanTimeAgo(lastUpdate)} ago</div>
-        </div>
       </div>
     </>
   );
