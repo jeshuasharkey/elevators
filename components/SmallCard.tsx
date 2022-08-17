@@ -17,20 +17,24 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
   const [accData] = useAtom(accDataAtom);
   const [accOutages] = useAtom(accOutagesAtom);
 
-  const totalEl = accData?.[item.name]?.equipment.filter(
-    (e: any) => e.equipmenttype === 'EL'
-  ).length;
+  const totalEl = accData?.[
+    item.station ? item.station : item.name
+  ]?.equipment.filter((e: any) => e.equipmenttype === 'EL').length;
 
-  const totalEs = accData?.[item.name]?.equipment.filter(
-    (e: any) => e.equipmenttype === 'ES'
-  ).length;
+  const totalEs = accData?.[
+    item.station ? item.station : item.name
+  ]?.equipment.filter((e: any) => e.equipmenttype === 'ES').length;
 
   const totalInactiveEl = accOutages?.filter(
-    (o: any) => o.station === item.station && o.equipmenttype === 'EL'
+    (o: any) =>
+      o.station === (item.station ? item.station : item.name) &&
+      o.equipmenttype === 'EL'
   ).length;
 
   const totalInactiveEs = accOutages?.filter(
-    (o: any) => o.station === item.station && o.equipmenttype === 'ES'
+    (o: any) =>
+      o.station === (item.station ? item.station : item.name) &&
+      o.equipmenttype === 'ES'
   ).length;
 
   const lines = item.trainno
@@ -44,7 +48,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
     >
       <div className='grid gap-2'>
         <div className='text-black font-extrabold text-[24px] leading-[100%]'>
-          {item.name}
+          {item.station ? item.station : item.name}
         </div>
         <div className='flex gap-2 items-end'>
           <div className='flex gap-1 flex-wrap flex-1'>
