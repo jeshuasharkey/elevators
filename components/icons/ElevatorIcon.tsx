@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ElevatorIcon() {
+export default function ElevatorIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width='19'
@@ -8,6 +8,7 @@ export default function ElevatorIcon() {
       viewBox='0 0 19 19'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
+      {...props}
     >
       <path
         d='M9.46666 0.989258H15.9893C17.0938 0.989258 17.9893 1.88469 17.9893 2.98926V15.9893C17.9893 17.0938 17.0938 17.9893 15.9893 17.9893H9.46666V0.989258Z'

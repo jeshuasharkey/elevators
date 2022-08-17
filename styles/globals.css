@@ -26,6 +26,12 @@ a {
   }
 }
 
+html,
+body {
+  position: fixed;
+  overflow: hidden;
+}
+
 * {
   font-family: 'SF Pro Rounded', sans-serif;
   box-sizing: border-box;

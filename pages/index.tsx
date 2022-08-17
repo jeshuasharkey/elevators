@@ -4,12 +4,15 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { UIEvent, useEffect, useRef, useState } from 'react';
 import Header from '../components/Header';
+import MoreMenu from '../components/MoreMenu';
+import Search from '../components/Search';
 import SingleStation from '../components/SingleStation';
 import {
   accDataAtom,
   accOutagesAtom,
   favouritesAtom,
   routesAtom,
+  searchAtom,
   slideAtom,
   stopsAtom,
   viewAtom,
@@ -17,20 +20,18 @@ import {
 import { humanTimeAgo } from '../utils/human-time-ago';
 
 const Home: NextPage = () => {
-  const [loading, setLoading] = useState(false);
   const [accData, setAccData] = useAtom(accDataAtom);
-  const [accOutages, setAccOutages] = useAtom(accOutagesAtom);
-  const [stops, setStops] = useAtom(stopsAtom);
-  const [routes, setRoutes] = useAtom(routesAtom);
+  const [, setAccOutages] = useAtom(accOutagesAtom);
+  const [, setStops] = useAtom(stopsAtom);
+  const [, setRoutes] = useAtom(routesAtom);
   const [favourites] = useAtom(favouritesAtom);
-  const inputRef = useRef(null);
   const [lastUpdate, setLastUpdate] = useState<any>();
   const [timeAgo, setTimeAgo] = useState<any>();
   const [view, setView] = useAtom(viewAtom);
+  const [search] = useAtom(searchAtom);
 
   // ALL EQUIPMENT
   const fetchData = (val = 0) => {
-    setLoading(true);
     fetch(
       `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fnyct_ene_equipments.json`,
       {
@@ -57,12 +58,12 @@ const Home: NextPage = () => {
             };
           }
         });
+        console.log('accData', newData);
+
         setAccData(newData);
-        setLoading(false);
       })
       .catch((error) => {
         alert(error);
-        setLoading(false);
       });
 
     //CURRENT OUTAGES
@@ -85,7 +86,8 @@ const Home: NextPage = () => {
     fetch(`https://www.goodservice.io/api/stops`)
       .then((response) => response.json())
       .then((data: any) => {
-        setStops(data);
+        console.log(data);
+        setStops(data.stops);
       })
       .catch((error) => {
         alert(error);
@@ -136,41 +138,46 @@ const Home: NextPage = () => {
       </Head>
       <div className='bg-pink h-screen w-screen text-white flex flex-col text-[12px]'>
         <Header refresh={() => fetchData()} />
-        <div
-          className={clsx(
-            'flex flex-1 snap-center w-screen',
-            view === 'list'
-              ? 'flex-col gap-3 p-5'
-              : 'flex-row overflow-scroll snap-x snap-mandatory no-scrollbar'
-          )}
-          onScroll={(e) => handleStationScroll(e)}
-          ref={ref}
-        >
-          {favourites.map((item, i) => (
-            <SingleStation key={item} item={accData?.[item]} i={i} />
-          ))}
-        </div>
-        {/* <pre className='text-[12px] font-extralight'>
-          {JSON.stringify(data, null, 2)}
-        </pre> */}
-        <div className='p-4 flex w-full gap-2 relative justify-center'>
-          {favourites.map((item, i) => (
+        {search && <Search />}
+        {!search && (
+          <>
             <div
               className={clsx(
-                'w-2 h-2 bg-white rounded-full transition',
-                i === activeSlide ? 'opacity-100' : 'opacity-30'
+                'flex flex-1 snap-center w-screen overflow-scroll',
+                view === 'list'
+                  ? 'flex-col gap-3 p-5'
+                  : 'flex-row snap-x snap-mandatory no-scrollbar'
               )}
-              key={item}
-              onClick={() => setSlide(i)}
-            ></div>
-          ))}
-          {timeAgo && (
-            <div className='text-[13px] tracking-wider absolute right-2 top-[50%] translate-y-[-50%]'>
-              {timeAgo} ago
+              onScroll={(e) => handleStationScroll(e)}
+              ref={ref}
+            >
+              {favourites.map((item, i) => (
+                <SingleStation key={item} item={accData?.[item]} i={i} />
+              ))}
             </div>
-          )}
-        </div>
+            {view === 'full' && (
+              <div className='p-4 mb-6 flex w-full gap-2 relative justify-center'>
+                {favourites.map((item, i) => (
+                  <div
+                    className={clsx(
+                      'w-2 h-2 bg-white rounded-full transition',
+                      i === activeSlide ? 'opacity-100' : 'opacity-30'
+                    )}
+                    key={item}
+                    onClick={() => setSlide(i)}
+                  ></div>
+                ))}
+                {timeAgo && (
+                  <div className='text-[13px] tracking-wider absolute right-2 top-[50%] translate-y-[-50%]'>
+                    {timeAgo} ago
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
       </div>
+      <MoreMenu />
     </>
   );
 };

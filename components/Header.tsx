@@ -1,15 +1,17 @@
 import { motion } from 'framer-motion';
-import React, { useState } from 'react';
-import { viewAtom } from '../store/store';
+import React, { useRef, useState } from 'react';
+import { searchAtom, viewAtom } from '../store/store';
 import ListViewIcon from './icons/ListViewIcon';
 import RefreshIcon from './icons/RefreshIcon';
 import SearchIcon from './icons/SearchIcon';
 import { useAtom } from 'jotai';
 import clsx from 'clsx';
+import CrossIcon from './icons/CrossIcon';
 
 export default function Header({ refresh }: { refresh: () => void }) {
   const [refreshAnimate, setRefreshAnimate] = useState(false);
   const [view, setView] = useAtom(viewAtom);
+  const [search, setSearch] = useAtom(searchAtom);
 
   function handleRefresh() {
     setRefreshAnimate(true);
@@ -19,6 +21,13 @@ export default function Header({ refresh }: { refresh: () => void }) {
   function handleAnimationComplete() {
     setRefreshAnimate(false);
   }
+
+  function handleClearSearch() {
+    setSearch('');
+    searchInput.current?.value = '';
+  }
+
+  const searchInput = useRef(null);
 
   return (
     <div className='flex gap-4 items-center p-5'>
@@ -30,26 +39,37 @@ export default function Header({ refresh }: { refresh: () => void }) {
           className='bg-transparent text-white placeholder:text-white text-[18px] transition placeholder:transition placeholder:transition-duration-[100ms] tracking-wide leading-[100%] focus:outline-none focus:placeholder:text-white/30'
           name='search'
           id='search'
+          ref={searchInput}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </label>
-      <motion.div
-        className='p-1 cursor-pointer'
-        animate={{ rotate: refreshAnimate ? 180 : 0 }}
-        transition={{ duration: refreshAnimate ? 0.3 : 0 }}
-        onClick={() => handleRefresh()}
-        onAnimationComplete={() => handleAnimationComplete()}
-      >
-        <RefreshIcon />
-      </motion.div>
-      <div
-        className={clsx(
-          'p-1',
-          view === 'list' ? 'opacity-30' : 'cursor-pointer'
-        )}
-        onClick={() => setView('list')}
-      >
-        <ListViewIcon />
-      </div>
+      {search && (
+        <div className='p-1 cursor-pointer' onClick={() => handleClearSearch()}>
+          <CrossIcon />
+        </div>
+      )}
+      {!search && (
+        <>
+          <motion.div
+            className='p-1 cursor-pointer'
+            animate={{ rotate: refreshAnimate ? 180 : 0 }}
+            transition={{ duration: refreshAnimate ? 0.3 : 0 }}
+            onClick={() => handleRefresh()}
+            onAnimationComplete={() => handleAnimationComplete()}
+          >
+            <RefreshIcon />
+          </motion.div>
+          <div
+            className={clsx(
+              'p-1',
+              view === 'list' ? 'opacity-30' : 'cursor-pointer'
+            )}
+            onClick={() => setView('list')}
+          >
+            <ListViewIcon />
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function EscalatorIcon() {
+export default function EscalatorIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
       width='21'
@@ -8,6 +8,7 @@ export default function EscalatorIcon() {
       viewBox='0 0 21 19'
       fill='none'
       xmlns='http://www.w3.org/2000/svg'
+      {...props}
     >
       <path
         d='M20.0425 6.11214C20.0425 7.50449 18.9683 8.63321 17.6433 8.63321H16.1892C15.9315 8.63321 15.6835 8.73188 15.4963 8.90896L7.06355 16.884C6.50072 17.4163 5.75515 17.7124 4.98049 17.7113L3.44191 17.7091C2.11686 17.7091 1.0427 16.5803 1.0427 15.188C1.0427 13.7956 2.11686 12.6669 3.44191 12.6669H4.76604C5.02375 12.6669 5.27168 12.5683 5.45893 12.3912L13.8896 4.41845C14.4513 3.8873 15.1949 3.59131 15.968 3.59123L17.6433 3.59106C18.9683 3.59106 20.0425 4.71979 20.0425 6.11214Z'
