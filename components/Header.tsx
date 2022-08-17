@@ -24,10 +24,10 @@ export default function Header({ refresh }: { refresh: () => void }) {
 
   function handleClearSearch() {
     setSearch('');
-    searchInput.current?.value = '';
+    if (searchInput.current) searchInput.current.value = '';
   }
 
-  const searchInput = useRef(null);
+  const searchInput = useRef<any>(null);
 
   return (
     <div className='flex gap-4 items-center p-5'>
