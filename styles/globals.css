@@ -33,7 +33,8 @@ body {
 }
 
 * {
-  font-family: 'SF Pro Rounded', sans-serif;
+  font-family: SFRounded, ui-rounded, SF Pro Rounded, system-ui, Helvetica Neue,
+    Arial, Helvetica, sans-serif;
   box-sizing: border-box;
 }
 
