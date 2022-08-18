@@ -19,11 +19,11 @@ export default function MoreMenu() {
     if (isFavourite()) {
       const newArr = favourites.filter((i) => i !== moreMenuItem);
       setFavourites(newArr);
-      localStorage.setItem('favourites', JSON.stringify(newArr.join(',')));
+      localStorage.setItem('favourites', newArr.join(','));
     } else {
       const newArr = [...favourites, moreMenuItem];
       setFavourites(newArr);
-      localStorage.setItem('favourites', JSON.stringify(newArr.join(',')));
+      localStorage.setItem('favourites', newArr.join(','));
     }
 
     setMoreMenuItem('');

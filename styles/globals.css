@@ -36,6 +36,7 @@ body {
   font-family: SFRounded, ui-rounded, SF Pro Rounded, system-ui, Helvetica Neue,
     Arial, Helvetica, sans-serif;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 input {

@@ -150,7 +150,7 @@ const Home: NextPage = () => {
           <>
             <div
               className={clsx(
-                'flex snap-center h-screen fixed top-0 mt-20 w-screen items-start overflow-scroll',
+                'flex snap-center h-screen fixed top-0 pt-16 w-screen items-start overflow-scroll',
                 view === 'list'
                   ? 'flex-col gap-3 p-5'
                   : 'flex-row snap-x snap-mandatory no-scrollbar'
@@ -168,7 +168,8 @@ const Home: NextPage = () => {
                   <div
                     className={clsx(
                       'w-2 h-2 bg-white rounded-full transition',
-                      i === activeSlide ? 'opacity-100' : 'opacity-30'
+                      i === activeSlide ? 'opacity-100' : 'opacity-30',
+                      favourites.length <= 1 && 'opacity-0'
                     )}
                     key={item}
                     onClick={() => setSlide(i)}
