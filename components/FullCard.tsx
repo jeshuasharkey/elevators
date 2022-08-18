@@ -97,7 +97,7 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
   return (
     <>
       <div
-        className='bg-white relative rounded-[50px] w-screen flex-shrink-0 overflow-scroll grid snap-center'
+        className='bg-white relative rounded-t-[50px] w-screen flex-shrink-0 overflow-scroll grid snap-center'
         id={'slide-' + i}
       >
         <div
@@ -181,7 +181,7 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
               })}
           </div>
         </div>
-        <div className='bg-[#000000] p-8 rounded-[40px] max-w-full grid gap-3'>
+        <div className='bg-[#000000] p-8 pb-24 rounded-t-[40px] max-w-full grid gap-3'>
           {stopData &&
             stopData.map((trip: any) => {
               const timeUntil = Math.round(

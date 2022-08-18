@@ -11,14 +11,21 @@ export default function MoreMenu() {
   const [moreMenuItem, setMoreMenuItem] = useAtom(moreMenuItemAtom);
   const [favourites, setFavourites] = useAtom(favouritesAtom);
 
-  const isFavourite = favourites.findIndex((i) => i === moreMenuItem) > -1;
+  function isFavourite() {
+    return favourites.findIndex((i) => i === moreMenuItem) > -1;
+  }
 
   function handleToggleFavourite() {
-    if (isFavourite) {
-      setFavourites(favourites.filter((i) => i !== moreMenuItem));
+    if (isFavourite()) {
+      const newArr = favourites.filter((i) => i !== moreMenuItem);
+      setFavourites(newArr);
+      localStorage.setItem('favourites', JSON.stringify(newArr.join(',')));
     } else {
-      setFavourites([...favourites, moreMenuItem]);
+      const newArr = [...favourites, moreMenuItem];
+      setFavourites(newArr);
+      localStorage.setItem('favourites', JSON.stringify(newArr.join(',')));
     }
+
     setMoreMenuItem('');
   }
 
@@ -46,13 +53,13 @@ export default function MoreMenu() {
                 className='flex gap-4 items-center p-6 border-b border-gray-100'
                 onClick={() => handleToggleFavourite()}
               >
-                {isFavourite && (
+                {isFavourite() && (
                   <>
                     <RemoveIcon />
                     <div className=''>Remove from favourites</div>
                   </>
                 )}
-                {!isFavourite && (
+                {!isFavourite() && (
                   <>
                     <FavouriteIcon />
                     <div className=''>Add to favourites</div>

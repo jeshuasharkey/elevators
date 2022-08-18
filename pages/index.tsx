@@ -24,11 +24,18 @@ const Home: NextPage = () => {
   const [, setAccOutages] = useAtom(accOutagesAtom);
   const [, setStops] = useAtom(stopsAtom);
   const [, setRoutes] = useAtom(routesAtom);
-  const [favourites] = useAtom(favouritesAtom);
+  const [favourites, setFavourites] = useAtom(favouritesAtom);
   const [lastUpdate, setLastUpdate] = useState<any>();
   const [timeAgo, setTimeAgo] = useState<any>();
   const [view, setView] = useAtom(viewAtom);
   const [search] = useAtom(searchAtom);
+
+  useEffect(() => {
+    const f = localStorage.getItem('favourites');
+    console.log(f);
+
+    if (f) setFavourites(f.split(','));
+  }, []);
 
   // ALL EQUIPMENT
   const fetchData = (val = 0) => {
@@ -143,7 +150,7 @@ const Home: NextPage = () => {
           <>
             <div
               className={clsx(
-                'flex flex-1 snap-center w-screen overflow-scroll',
+                'flex snap-center h-screen fixed top-0 mt-20 w-screen items-start overflow-scroll',
                 view === 'list'
                   ? 'flex-col gap-3 p-5'
                   : 'flex-row snap-x snap-mandatory no-scrollbar'
@@ -156,7 +163,7 @@ const Home: NextPage = () => {
               ))}
             </div>
             {view === 'full' && (
-              <div className='p-4 mb-6 flex w-full gap-2 relative justify-center'>
+              <div className='p-4 pb-8 flex w-full gap-2 justify-center bg-pink rounded-t-[50px] fixed bottom-0 left-0 right-0'>
                 {favourites.map((item, i) => (
                   <div
                     className={clsx(
@@ -168,7 +175,7 @@ const Home: NextPage = () => {
                   ></div>
                 ))}
                 {timeAgo && (
-                  <div className='text-[13px] tracking-wider absolute right-2 top-[50%] translate-y-[-50%]'>
+                  <div className='text-[13px] tracking-wider absolute right-10 top-3'>
                     {timeAgo} ago
                   </div>
                 )}

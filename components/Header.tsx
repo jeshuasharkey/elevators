@@ -30,7 +30,7 @@ export default function Header({ refresh }: { refresh: () => void }) {
   const searchInput = useRef<any>(null);
 
   return (
-    <div className='flex gap-4 items-center p-5'>
+    <div className='flex gap-4 items-center p-5 sticky top-0 left-0 right-0'>
       <label htmlFor='search' className='flex gap-3 flex-1'>
         <SearchIcon />
         <input
