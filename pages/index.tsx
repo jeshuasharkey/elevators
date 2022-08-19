@@ -143,17 +143,17 @@ const Home: NextPage = () => {
         <link rel='manifest' href='manifest.json' />
         <title>ELEVATORS</title>
       </Head>
-      <div className='bg-pink h-screen w-screen text-white flex flex-col text-[12px]'>
+      <div className='bg-[#EBF0F4] h-screen w-screen text-white flex flex-col text-[12px]'>
         <Header refresh={() => fetchData()} />
         {search && <Search />}
         {!search && (
           <>
             <div
               className={clsx(
-                'flex snap-center h-screen fixed top-0 pt-16 w-screen items-start overflow-scroll',
+                'flex flex-1 snap-center w-screen overflow-scroll',
                 view === 'list'
                   ? 'flex-col gap-3 p-5'
-                  : 'flex-row snap-x snap-mandatory no-scrollbar'
+                  : 'flex-row snap-x snap-mandatory no-scrollbar items-start'
               )}
               onScroll={(e) => handleStationScroll(e)}
               ref={ref}
@@ -163,11 +163,11 @@ const Home: NextPage = () => {
               ))}
             </div>
             {view === 'full' && (
-              <div className='p-4 pb-8 flex w-full gap-2 justify-center bg-pink rounded-t-[50px] fixed bottom-0 left-0 right-0'>
+              <div className='p-4 pb-8 flex w-full gap-2 justify-center relative'>
                 {favourites.map((item, i) => (
                   <div
                     className={clsx(
-                      'w-2 h-2 bg-white rounded-full transition',
+                      'w-2 h-2 bg-black rounded-full transition',
                       i === activeSlide ? 'opacity-100' : 'opacity-30',
                       favourites.length <= 1 && 'opacity-0'
                     )}
@@ -176,7 +176,7 @@ const Home: NextPage = () => {
                   ></div>
                 ))}
                 {timeAgo && (
-                  <div className='text-[13px] tracking-wider absolute right-10 top-3'>
+                  <div className='text-[13px] tracking-wider absolute right-10 top-3 text-black'>
                     {timeAgo} ago
                   </div>
                 )}

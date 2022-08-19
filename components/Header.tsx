@@ -36,7 +36,7 @@ export default function Header({ refresh }: { refresh: () => void }) {
         <input
           type='text'
           placeholder='Find Stations'
-          className='bg-transparent text-white placeholder:text-white text-[18px] transition placeholder:transition placeholder:transition-duration-[100ms] tracking-wide leading-[100%] focus:outline-none focus:placeholder:text-white/30'
+          className='bg-transparent text-black placeholder:text-black text-[18px] transition placeholder:transition placeholder:transition-duration-[100ms] tracking-wide leading-[100%] focus:outline-none focus:placeholder:text-white/30'
           name='search'
           id='search'
           ref={searchInput}

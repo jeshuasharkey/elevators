@@ -16,6 +16,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
   const [, setView] = useAtom(viewAtom);
   const [accData] = useAtom(accDataAtom);
   const [accOutages] = useAtom(accOutagesAtom);
+  const [slide] = useAtom(slideAtom);
 
   const totalEl = accData?.[
     item.station ? item.station : item.name
@@ -43,6 +44,8 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
 
   return (
     <motion.div
+      initial={{ scale: slide === i ? 1.1 : 1 }}
+      animate={{ scale: slide === i ? 1 : 1 }}
       whileTap={{ scale: 0.98 }}
       className='bg-white px-6 py-5 rounded-[30px] cursor-pointer'
     >

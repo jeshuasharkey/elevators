@@ -11,42 +11,42 @@ export default function ListViewIcon() {
     >
       <path
         d='M6 1H19'
-        stroke='white'
+        stroke='black'
         strokeWidth='2'
         strokeLinecap='round'
         strokeLinejoin='round'
       />
       <path
         d='M6 7H19'
-        stroke='white'
+        stroke='black'
         strokeWidth='2'
         strokeLinecap='round'
         strokeLinejoin='round'
       />
       <path
         d='M6 13H19'
-        stroke='white'
+        stroke='black'
         strokeWidth='2'
         strokeLinecap='round'
         strokeLinejoin='round'
       />
       <path
         d='M1 1H1.01'
-        stroke='white'
+        stroke='black'
         strokeWidth='2'
         strokeLinecap='round'
         strokeLinejoin='round'
       />
       <path
         d='M1 7H1.01'
-        stroke='white'
+        stroke='black'
         strokeWidth='2'
         strokeLinecap='round'
         strokeLinejoin='round'
       />
       <path
         d='M1 13H1.01'
-        stroke='white'
+        stroke='black'
         strokeWidth='2'
         strokeLinecap='round'
         strokeLinejoin='round'

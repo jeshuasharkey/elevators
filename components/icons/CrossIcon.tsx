@@ -11,14 +11,14 @@ export default function CrossIcon() {
     >
       <path
         d='M15 1L1 15'
-        stroke='white'
+        stroke='black'
         strokeWidth='2'
         strokeLinecap='round'
         strokeLinejoin='round'
       />
       <path
         d='M15 15L1 1'
-        stroke='white'
+        stroke='black'
         strokeWidth='2'
         strokeLinecap='round'
         strokeLinejoin='round'
