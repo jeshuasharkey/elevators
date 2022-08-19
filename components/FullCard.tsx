@@ -121,11 +121,14 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
         ref={card}
       >
         <div className='pt-11 pb-8 px-8 grid gap-8 content-start'>
-          <div className='grid gap-4 content-start sticky top-6' ref={top}>
+          <div
+            className='grid gap-4 content-start sticky top-6 overflow-hidden'
+            ref={top}
+          >
             <div
               className='absolute py-4 px-2 top-[-10px] right-0 transition'
               style={{
-                transform: `translate(${scrollPos > 0.04 ? '0, 4px' : '0, 0'})`,
+                transform: `translate(${scrollPos > 0.04 ? '0, 5px' : '0, 0'})`,
               }}
               onClick={() => handleToggleMoreMenu()}
             >
@@ -163,7 +166,7 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
                 className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition'
                 style={{
                   transform: `translate(${
-                    scrollPos > 0.04 ? '46px, -65px' : '0, 0'
+                    scrollPos > 0.04 ? '46px, -64px' : '0, 0'
                   })`,
                 }}
               >
