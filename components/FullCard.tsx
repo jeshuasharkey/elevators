@@ -101,9 +101,11 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
     container: card,
   });
 
+  const [animating, setAnimating] = useState(true);
   const [scrollPos, setScrollPos] = useState(0);
 
   useEffect(() => {
+    if (animating) return;
     scrollYProgress.onChange((progress) => {
       setScrollPos(progress);
     });
@@ -116,19 +118,26 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
         initial={{ scale: 0.9 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.2 }}
-        className='bg-white relative rounded-[50px] w-screen flex-shrink-0 grid snap-center origin-top overflow-scroll h-full'
+        onAnimationComplete={() => {
+          setAnimating(false);
+          setScrollPos(0);
+        }}
+        className='bg-white relative rounded-[50px] w-screen flex-shrink-0 grid snap-center origin-top overflow-scroll h-full no-scrollbar'
         id={'slide-' + i}
         ref={card}
       >
-        <div className='pt-11 pb-8 px-8 grid gap-8 content-start'>
+        <div className='pt-3 pb-8 px-8 grid gap-8 content-start'>
           <div
-            className='grid gap-4 content-start sticky top-6 overflow-hidden'
+            className='grid gap-4 content-start sticky top-0 pt-6 overflow-hidden'
             ref={top}
           >
+            <div className='absolute bg-white w-full top-0 h-16'></div>
             <div
-              className='absolute py-4 px-2 top-[-10px] right-0 transition'
+              className='absolute py-4 px-2 top-2 right-0 transition'
               style={{
-                transform: `translate(${scrollPos > 0.04 ? '0, 5px' : '0, 0'})`,
+                transform: `translate(${
+                  scrollPos > 0.04 ? '0, 10px' : '0, 10px'
+                })`,
               }}
               onClick={() => handleToggleMoreMenu()}
             >
@@ -136,7 +145,7 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
             </div>
             <div
               className={clsx(
-                'text-black font-extrabold text-[46px] leading-[100%] origin-top-left transition duration-500'
+                'text-black font-extrabold text-[46px] leading-[100%] origin-top-left transition duration-500 mr-10'
               )}
               style={{
                 transform: `scale(${scrollPos > 0.04 ? 0.5 : 1})`,
@@ -172,8 +181,9 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
               >
                 {totalInactive > 0 ? <AlertIcon /> : <TickIcon />}
                 <span
+                  className='transition'
                   style={{
-                    opacity: scrollPos > 0.04 ? '0' : '1',
+                    opacity: scrollPos > 0.03 ? '0' : '1',
                   }}
                 >
                   {totalInactive > 0

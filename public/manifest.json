@@ -2,8 +2,8 @@
   "name": "Elevators",
   "short_name": "Elevators",
   "start_url": "/",
-  "theme_color": "CB97C0",
-  "background_color": "CB97C0",
+  "theme_color": "#EBF0F4",
+  "background_color": "#EBF0F4",
   "display": "standalone",
   "orientation": "portrait-primary",
   "icons": [
