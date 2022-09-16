@@ -44,8 +44,8 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
 
   return (
     <motion.div
-      initial={{ scale: slide === i ? 1.1 : 1 }}
-      animate={{ scale: slide === i ? 1 : 1 }}
+      // initial={{ scale: slide === i ? 1.1 : 1 }}
+      // animate={{ scale: slide === i ? 1 : 1 }}
       whileTap={{ scale: 0.98 }}
       className='bg-white px-6 py-5 rounded-[30px] cursor-pointer'
     >
@@ -69,7 +69,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
               <div
                 className={clsx(
                   'flex gap-1 rounded-full items-center py-[2px] px-2 text-[16px] leading-[100%]',
-                  totalInactiveEs > 0 ? 'bg-[#C5C5C5]' : 'bg-pink'
+                  totalInactiveEs > 0 ? 'bg-[#C5C5C5]' : 'bg-[#BD8A5B]'
                 )}
               >
                 {totalEs}
@@ -80,7 +80,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
               <div
                 className={clsx(
                   'flex gap-1 rounded-full items-center py-[2px] px-2 text-[16px] leading-[100%]',
-                  totalInactiveEs > 0 ? 'bg-[#C5C5C5]' : 'bg-pink'
+                  totalInactiveEl > 0 ? 'bg-[#C5C5C5]' : 'bg-[#BD8A5B]'
                 )}
               >
                 {totalEl}
@@ -88,7 +88,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
               </div>
             )}
             {(totalInactiveEs > 0 || totalInactiveEl > 0) && (
-              <AlertIcon className='w-6' />
+              <AlertIcon color='#c5c5c5' className='w-6' />
             )}
           </div>
         </div>

@@ -7,6 +7,7 @@ import {
   accDataAtom,
   accOutagesAtom,
   moreMenuItemAtom,
+  moreMenuTrainNoAtom,
   stopsAtom,
 } from '../store/store';
 import AlertIcon from './icons/AlertIcon';
@@ -15,7 +16,15 @@ import EscalatorIcon from './icons/EscalatorIcon';
 import MoreMenuIcon from './icons/MoreMenuIcon';
 import TickIcon from './icons/TickIcon';
 
-export default function FullCard({ item, i }: { item: any; i: number }) {
+export default function FullCard({
+  item,
+  i,
+  overlayStyle,
+}: {
+  item: any;
+  i: number;
+  overlayStyle?: boolean;
+}) {
   const [accOutages] = useAtom(accOutagesAtom);
 
   const [stops] = useAtom(stopsAtom);
@@ -71,6 +80,8 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
 
   useEffect(() => {
     if (!item) return;
+    console.log(item);
+
     fetchData();
   }, [item]);
 
@@ -91,8 +102,12 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
   const equipment = accData[item.station ? item.station : item.name]?.equipment;
 
   const [moreMenuItem, setMoreMenuItem] = useAtom(moreMenuItemAtom);
+  const [moreMenuTrainNo, setMoreMenuTrainNo] = useAtom(moreMenuTrainNoAtom);
   function handleToggleMoreMenu() {
     setMoreMenuItem(item.station ? item.station : item.name);
+    setMoreMenuTrainNo(
+      item.trainno ? item.trainno : Object.keys(item.routes).join('/')
+    );
   }
 
   const card = useRef(null);
@@ -115,30 +130,32 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
   return (
     <>
       <motion.div
-        initial={{ scale: 0.9 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 0.2 }}
+        // initial={{ scale: 0.9 }}
+        // animate={{ scale: 1 }}
+        // transition={{ duration: 0.2 }}
         onAnimationComplete={() => {
           setAnimating(false);
           setScrollPos(0);
         }}
-        className='bg-white relative rounded-[50px] w-screen flex-shrink-0 grid snap-center origin-top overflow-scroll h-full no-scrollbar'
+        className={clsx(
+          'bg-white relative w-screen flex-shrink-0 grid snap-center origin-top overflow-scroll h-full no-scrollbar overscroll-none',
+          overlayStyle ? ' rounded-t-[50px]' : ' rounded-[50px]'
+        )}
         id={'slide-' + i}
         ref={card}
       >
         <div className='pt-3 pb-8 px-8 grid gap-8 content-start'>
           <div
-            className='grid gap-4 content-start sticky top-0 pt-6 overflow-hidden'
+            className='grid gap-4 content-start top-0 pt-6 overflow-hidden'
             ref={top}
           >
-            <div className='absolute bg-white w-full top-0 h-16'></div>
             <div
-              className='absolute py-4 px-2 top-2 right-0 transition'
-              style={{
-                transform: `translate(${
-                  scrollPos > 0.04 ? '0, 10px' : '0, 10px'
-                })`,
-              }}
+              className='absolute py-4 px-2 top-4 right-7 transition'
+              // style={{
+              //   transform: `translate(${
+              //     scrollPos > 0.04 ? '0, 10px' : '0, 10px'
+              //   })`,
+              // }}
               onClick={() => handleToggleMoreMenu()}
             >
               <MoreMenuIcon />
@@ -147,9 +164,9 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
               className={clsx(
                 'text-black font-extrabold text-[46px] leading-[100%] origin-top-left transition duration-500 mr-10'
               )}
-              style={{
-                transform: `scale(${scrollPos > 0.04 ? 0.5 : 1})`,
-              }}
+              // style={{
+              //   transform: `scale(${scrollPos > 0.04 ? 0.5 : 1})`,
+              // }}
             >
               {item.station ? item.station : item.name}
             </div>
@@ -159,38 +176,49 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
                   <div
                     key={line}
                     className='w-8 h-8 rounded-full bg-black text-[18px] font-bold flex items-center justify-center transition duration-300'
-                    style={{
-                      transform: `translateY(${
-                        scrollPos > 0.03 ? '-60px' : '0'
-                      })`,
-                      opacity: scrollPos > 0.03 ? '0' : '1',
-                      transitionDelay: `${i * 0.05}s`,
-                    }}
+                    style={
+                      {
+                        // transform: `translateY(${
+                        //   scrollPos > 0.03 ? '-60px' : '0'
+                        // })`,
+                        // opacity: scrollPos > 0.03 ? '0' : '1',
+                        // transitionDelay: `${i * 0.05}s`,
+                      }
+                    }
                   >
                     {line}
                   </div>
                 ))}
               </div>
-              <div
-                className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition'
-                style={{
-                  transform: `translate(${
-                    scrollPos > 0.04 ? '46px, -64px' : '0, 0'
-                  })`,
-                }}
-              >
-                {totalInactive > 0 ? <AlertIcon /> : <TickIcon />}
-                <span
-                  className='transition'
-                  style={{
-                    opacity: scrollPos > 0.03 ? '0' : '1',
-                  }}
+              {equipment && (
+                <div
+                  className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition'
+                  // style={{
+                  //   transform: `translate(${
+                  //     scrollPos > 0.04 ? '46px, -64px' : '0, 0'
+                  //   })`,
+                  // }}
                 >
-                  {totalInactive > 0
-                    ? totalInactive + ' Inactive'
-                    : 'All Active'}
-                </span>
-              </div>
+                  {totalInactive > 0 ? (
+                    <AlertIcon color='#c5c5c5' />
+                  ) : (
+                    <TickIcon color='#BD8A5B' />
+                  )}
+                  <span
+                    className={clsx(
+                      'transition',
+                      totalInactive > 0 ? 'text-[#C5C5C5]' : 'text-[#BD8A5B]'
+                    )}
+                    // style={{
+                    //   opacity: scrollPos > 0.03 ? '0' : '1',
+                    // }}
+                  >
+                    {totalInactive > 0
+                      ? totalInactive + ' Inactive'
+                      : 'All Active'}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           <div className='grid gap-3'>
@@ -246,7 +274,12 @@ export default function FullCard({ item, i }: { item: any; i: number }) {
               })}
           </div>
         </div>
-        <div className='bg-[#000000] p-8 pb-24 rounded-t-[40px] max-w-full grid gap-3 sticky top-0'>
+        <div
+          className={clsx(
+            'bg-[#000000] p-8 rounded-t-[40px] max-w-full grid gap-3 top-0 relative',
+            !overlayStyle && 'rounded-b-[50px]'
+          )}
+        >
           {stopData &&
             stopData
               .filter(

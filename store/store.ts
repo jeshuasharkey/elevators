@@ -10,3 +10,4 @@ export const viewAtom = atom('full');
 export const slideAtom = atom(0);
 export const searchAtom = atom('');
 export const moreMenuItemAtom = atom('');
+export const moreMenuTrainNoAtom = atom('');

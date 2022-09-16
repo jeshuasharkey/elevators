@@ -33,13 +33,13 @@ export default function Search() {
       </div>
       <AnimatePresence>
         {activeItem && (
-          <div className='fixed top-0 left-0 right-0 bottom-0 overflow-scroll py-12 w-screen max-w-screen'>
+          <div className='fixed top-0 left-0 right-0 bottom-0 overflow-scroll pt-12 w-screen max-w-screen h-screen flex items-end'>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className='bg-black/80 fixed top-0 left-0 w-full h-full'
+              className='bg-[rgb(235,240,244,0.8)] fixed top-0 left-0 w-full h-full'
               onClick={() => handleClose()}
             ></motion.div>
             <motion.div
@@ -47,9 +47,9 @@ export default function Search() {
               animate={{ y: 0 }}
               exit={{ y: '110%' }}
               transition={{ duration: 0.4 }}
-              className='z-10 relative'
+              className='z-10 relative mt-auto'
             >
-              <FullCard item={activeItem} i={0} />
+              <FullCard item={activeItem} i={0} overlayStyle={true} />
             </motion.div>
           </div>
         )}

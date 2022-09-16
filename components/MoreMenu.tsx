@@ -4,11 +4,16 @@ import FavouriteIcon from './icons/FavouriteIcon';
 import NavigateIcon from './icons/NavigateIcon';
 import RemoveIcon from './icons/RemoveIcon';
 import { useAtom } from 'jotai';
-import { favouritesAtom, moreMenuItemAtom } from '../store/store';
+import {
+  favouritesAtom,
+  moreMenuItemAtom,
+  moreMenuTrainNoAtom,
+} from '../store/store';
 import Link from 'next/link';
 
 export default function MoreMenu() {
   const [moreMenuItem, setMoreMenuItem] = useAtom(moreMenuItemAtom);
+  const [moreMenuTrainNo, setMoreMenuTrainNo] = useAtom(moreMenuTrainNoAtom);
   const [favourites, setFavourites] = useAtom(favouritesAtom);
 
   function isFavourite() {
@@ -26,7 +31,12 @@ export default function MoreMenu() {
       localStorage.setItem('favourites', newArr.join(','));
     }
 
+    handleClearMoreMenu();
+  }
+
+  function handleClearMoreMenu() {
     setMoreMenuItem('');
+    setMoreMenuTrainNo('');
   }
 
   return (
@@ -38,8 +48,8 @@ export default function MoreMenu() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className='bg-black/80 fixed top-0 left-0 w-full h-full'
-            onClick={() => setMoreMenuItem('')}
+            className='bg-gradient-to-b from-transparent to-black fixed top-0 left-0 w-full h-full'
+            onClick={() => handleClearMoreMenu()}
           ></motion.div>
           <motion.div
             initial={{ y: '110%' }}
@@ -70,7 +80,7 @@ export default function MoreMenu() {
                 href={`https://www.google.com/maps/search/?api=1&query=${moreMenuItem.replace(
                   ' ',
                   '+'
-                )}`}
+                )}+${moreMenuTrainNo}+Subway+Station`}
                 passHref
               >
                 <a target='_blank' className='contents'>
@@ -83,7 +93,7 @@ export default function MoreMenu() {
             </div>
             <div
               className='bg-white rounded-[24px] text-center p-4'
-              onClick={() => setMoreMenuItem('')}
+              onClick={() => handleClearMoreMenu()}
             >
               Cancel
             </div>
