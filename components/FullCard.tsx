@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { motion, useScroll } from 'framer-motion';
 import { useAtom } from 'jotai';
+import { loadDefaultErrorComponents } from 'next/dist/server/load-components';
 import { useEffect, useRef, useState } from 'react';
 import Moment from 'react-moment';
 import {
@@ -15,6 +16,7 @@ import ElevatorIcon from './icons/ElevatorIcon';
 import EscalatorIcon from './icons/EscalatorIcon';
 import MoreMenuIcon from './icons/MoreMenuIcon';
 import TickIcon from './icons/TickIcon';
+import RouteIndicator from './RouteIndicator';
 
 export default function FullCard({
   item,
@@ -80,8 +82,6 @@ export default function FullCard({
 
   useEffect(() => {
     if (!item) return;
-    console.log(item);
-
     fetchData();
   }, [item]);
 
@@ -130,16 +130,13 @@ export default function FullCard({
   return (
     <>
       <motion.div
-        // initial={{ scale: 0.9 }}
-        // animate={{ scale: 1 }}
-        // transition={{ duration: 0.2 }}
         onAnimationComplete={() => {
           setAnimating(false);
           setScrollPos(0);
         }}
         className={clsx(
           'bg-white relative w-screen flex-shrink-0 grid snap-center origin-top overflow-scroll h-full no-scrollbar overscroll-none',
-          overlayStyle ? ' rounded-t-[50px]' : ' rounded-[50px]'
+          overlayStyle ? ' rounded-t-[40px]' : ' rounded-[50px]'
         )}
         id={'slide-' + i}
         ref={card}
@@ -151,11 +148,6 @@ export default function FullCard({
           >
             <div
               className='absolute py-4 px-2 top-4 right-7 transition'
-              // style={{
-              //   transform: `translate(${
-              //     scrollPos > 0.04 ? '0, 10px' : '0, 10px'
-              //   })`,
-              // }}
               onClick={() => handleToggleMoreMenu()}
             >
               <MoreMenuIcon />
@@ -164,54 +156,27 @@ export default function FullCard({
               className={clsx(
                 'text-black font-extrabold text-[46px] leading-[100%] origin-top-left transition duration-500 mr-10'
               )}
-              // style={{
-              //   transform: `scale(${scrollPos > 0.04 ? 0.5 : 1})`,
-              // }}
             >
               {item.station ? item.station : item.name}
             </div>
             <div className='flex justify-between items-start gap-4'>
               <div className='flex gap-2 flex-wrap'>
                 {lines.map((line: string, i: number) => (
-                  <div
-                    key={line}
-                    className='w-8 h-8 rounded-full bg-black text-[18px] font-bold flex items-center justify-center transition duration-300'
-                    style={
-                      {
-                        // transform: `translateY(${
-                        //   scrollPos > 0.03 ? '-60px' : '0'
-                        // })`,
-                        // opacity: scrollPos > 0.03 ? '0' : '1',
-                        // transitionDelay: `${i * 0.05}s`,
-                      }
-                    }
-                  >
-                    {line}
-                  </div>
+                  <RouteIndicator id={line} key={line} />
                 ))}
               </div>
               {equipment && (
-                <div
-                  className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition'
-                  // style={{
-                  //   transform: `translate(${
-                  //     scrollPos > 0.04 ? '46px, -64px' : '0, 0'
-                  //   })`,
-                  // }}
-                >
+                <div className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition'>
                   {totalInactive > 0 ? (
                     <AlertIcon color='#c5c5c5' />
                   ) : (
-                    <TickIcon color='#BD8A5B' />
+                    <TickIcon color='#000000' />
                   )}
                   <span
                     className={clsx(
                       'transition',
-                      totalInactive > 0 ? 'text-[#C5C5C5]' : 'text-[#BD8A5B]'
+                      totalInactive > 0 ? 'text-[#C5C5C5]' : 'text-[#000000]'
                     )}
-                    // style={{
-                    //   opacity: scrollPos > 0.03 ? '0' : '1',
-                    // }}
                   >
                     {totalInactive > 0
                       ? totalInactive + ' Inactive'
@@ -232,7 +197,7 @@ export default function FullCard({
                     key={equipment.equipmentno}
                     className={clsx(
                       'flex items-center rounded-[26px] min-h-[72px] p-4 gap-3',
-                      !outage ? 'bg-[#BD8A5B]' : 'bg-[#C5C5C5]'
+                      !outage ? 'bg-[#000000]' : 'bg-[#C5C5C5]'
                     )}
                   >
                     {equipment.equipmenttype === 'EL' && <ElevatorIcon />}
@@ -248,14 +213,14 @@ export default function FullCard({
                             <AlertIcon className='w-4 h-4' color='white' />
                             <Moment
                               date={outage.outagedate}
-                              format='h:mma ddd Mo MMM YY'
+                              format='h:mma ddd Do MMM YY'
                             />
                           </div>
                           <div className='flex gap-2 items-center'>
                             <TickIcon className='w-4 h-4' color='white' />
                             <Moment
                               date={outage.estimatedreturntoservice}
-                              format='h:mma ddd Mo MMM YY'
+                              format='h:mma ddd Do MMM YY'
                             />
                           </div>
                         </div>
@@ -264,7 +229,7 @@ export default function FullCard({
                     <div
                       className={clsx(
                         'text-[14px] font-semibold tracking-wide uppercase bg-white rounded-full leading-[100%] py-1 px-2',
-                        !outage ? 'text-[#BD8A5B]' : 'text-[#C5C5C5]'
+                        !outage ? 'text-[#000000]' : 'text-[#C5C5C5]'
                       )}
                     >
                       {!outage ? 'Active' : 'Inactive'}
@@ -298,9 +263,7 @@ export default function FullCard({
                     key={trip.id}
                     className='flex gap-4 items-center w-full overflow-hidden'
                   >
-                    <div className='w-6 h-6 bg-white rounded-full text-black font-bold text-[16px] flex items-center justify-center'>
-                      {trip.route_id}
-                    </div>
+                    <RouteIndicator id={trip.route_id} small />
                     <div className='flex-1 overflow-hidden whitespace-nowrap text-ellipsis text-[16px] font-medium tracking-wider'>
                       to {findDest(trip.destination_stop)}
                     </div>
@@ -321,12 +284,6 @@ export default function FullCard({
                         </div>
                       )}
                     </div>
-                    {/* <pre
-                    key={trip.id}
-                    className='text-[12px] font-extralight text-white'
-                  >
-                    {JSON.stringify(trip, null, 2)}
-                  </pre> */}
                   </div>
                 );
               })}

@@ -18,6 +18,8 @@ import {
   viewAtom,
 } from '../store/store';
 import { humanTimeAgo } from '../utils/human-time-ago';
+import useEmblaCarousel from 'embla-carousel-react';
+import { loadDefaultErrorComponents } from 'next/dist/server/load-components';
 
 const Home: NextPage = () => {
   const [accData, setAccData] = useAtom(accDataAtom);
@@ -32,8 +34,6 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     const f = localStorage.getItem('favourites');
-    console.log(f);
-
     if (f) setFavourites(f.split(','));
   }, []);
 
@@ -52,12 +52,13 @@ const Home: NextPage = () => {
         setLastUpdate(Date.now());
         const newData: any = {};
         data.forEach((item: any) => {
-          const exsits = !!newData[item.station];
+          const station = item.station.replace('-', ' - ');
+          const exsits = !!newData[station];
           if (exsits) {
-            newData[item.station].equipment.push(item);
+            newData[station].equipment.push(item);
           } else {
-            newData[item.station] = {
-              station: item.station,
+            newData[station] = {
+              station: station,
               borough: item.borough,
               trainno: item.trainno,
               stationId: item.elevatorsgtfsstopid,
@@ -65,8 +66,6 @@ const Home: NextPage = () => {
             };
           }
         });
-        console.log('accData', newData);
-
         setAccData(newData);
       })
       .catch((error) => {
@@ -93,7 +92,6 @@ const Home: NextPage = () => {
     fetch(`https://www.goodservice.io/api/stops`)
       .then((response) => response.json())
       .then((data: any) => {
-        console.log(data);
         setStops(data.stops);
       })
       .catch((error) => {
@@ -111,8 +109,9 @@ const Home: NextPage = () => {
   };
 
   useEffect(() => {
+    setSlide(1);
     fetchData();
-  }, []);
+  }, [favourites]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -124,18 +123,30 @@ const Home: NextPage = () => {
   const [slide, setSlide] = useAtom(slideAtom);
   const [activeSlide, setActiveSlide] = useState(0);
 
-  function handleStationScroll(e: UIEvent) {
-    const w = window.innerWidth;
-    const t = e?.target as HTMLDivElement;
-    const s = t.scrollLeft;
-    setActiveSlide(Math.round(s / w));
-  }
-
   useEffect(() => {
     if (ref.current) ref.current.scrollLeft = window.innerWidth * slide;
   }, [view]);
 
   const ref = useRef<HTMLDivElement>(null);
+  const [emblaRef, emblaApi] = useEmblaCarousel();
+
+  useEffect(() => {
+    if (emblaApi) {
+      emblaApi.scrollTo(slide, true);
+    }
+  }, [slide, emblaApi]);
+
+  useEffect(() => {
+    if (emblaApi) {
+      if (!emblaApi.selectedScrollSnap() && !emblaApi.canScrollPrev()) {
+        setActiveSlide(0);
+      }
+      emblaApi.on('select', () => {
+        const active = emblaApi.selectedScrollSnap();
+        setActiveSlide(active);
+      });
+    }
+  }, [emblaApi]);
 
   return (
     <>
@@ -148,39 +159,53 @@ const Home: NextPage = () => {
         {search && <Search />}
         {!search && (
           <>
-            <div
-              className={clsx(
-                'flex flex-1 snap-center w-screen overflow-scroll',
-                view === 'list'
-                  ? 'flex-col gap-3 p-5'
-                  : 'flex-row snap-x snap-mandatory no-scrollbar items-start'
-              )}
-              onScroll={(e) => handleStationScroll(e)}
-              ref={ref}
-            >
-              {favourites.map((item, i) => (
-                <SingleStation key={item} item={accData?.[item]} i={i} />
-              ))}
-            </div>
-            {view === 'full' && (
-              <div className='p-4 pb-8 flex w-full gap-2 justify-center relative'>
-                {favourites.map((item, i) => (
-                  <div
-                    className={clsx(
-                      'w-2 h-2 bg-black rounded-full transition',
-                      i === activeSlide ? 'opacity-100' : 'opacity-30',
-                      favourites.length <= 1 && 'opacity-0'
-                    )}
-                    key={item}
-                    onClick={() => setSlide(i)}
-                  ></div>
-                ))}
-                {timeAgo && (
-                  <div className='text-[13px] tracking-wider absolute right-10 top-3 text-black'>
-                    {timeAgo} ago
-                  </div>
+            {view === 'list' && (
+              <div
+                className={clsx(
+                  'flex flex-1 snap-center w-screen overflow-scroll',
+                  view === 'list'
+                    ? 'flex-col gap-3 p-5'
+                    : 'flex-row snap-x snap-mandatory no-scrollbar items-start'
                 )}
+                ref={ref}
+              >
+                {favourites.map((item, i) => (
+                  <SingleStation key={item} item={accData?.[item]} i={i} />
+                ))}
               </div>
+            )}
+            {view === 'full' && (
+              <>
+                <div className='embla' ref={emblaRef}>
+                  <div className='embla__container'>
+                    {favourites.map((item, i) => (
+                      <div className='embla__slide' key={item}>
+                        <pre className='text-black'></pre>
+                        <SingleStation item={accData?.[item]} i={i} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className='p-4 pb-8 flex w-full gap-2 justify-center relative'>
+                  {favourites.map((item, i) => (
+                    <div
+                      className={clsx(
+                        'w-2 h-2 bg-black rounded-full transition',
+                        i === activeSlide ? 'opacity-100' : 'opacity-30',
+                        favourites.length <= 1 && 'opacity-0'
+                      )}
+                      key={item}
+                      onClick={() => setSlide(i)}
+                    ></div>
+                  ))}
+                  {timeAgo && (
+                    <div className='text-[13px] tracking-wider absolute right-10 top-3 text-black'>
+                      {timeAgo} ago
+                    </div>
+                  )}
+                </div>
+              </>
             )}
           </>
         )}

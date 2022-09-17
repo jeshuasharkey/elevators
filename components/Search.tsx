@@ -4,6 +4,7 @@ import { useAtom } from 'jotai';
 import SmallCard from './SmallCard';
 import FullCard from './FullCard';
 import { AnimatePresence, motion } from 'framer-motion';
+import Sheet from 'react-modal-sheet';
 
 export default function Search() {
   const [search, setSearch] = useAtom(searchAtom);
@@ -31,7 +32,18 @@ export default function Search() {
           </div>
         ))}
       </div>
-      <AnimatePresence>
+
+      <Sheet isOpen={!!activeItem} onClose={() => handleClose()}>
+        <Sheet.Container>
+          <Sheet.Content>
+            <FullCard item={activeItem} i={0} overlayStyle={true} />
+          </Sheet.Content>
+        </Sheet.Container>
+
+        <Sheet.Backdrop />
+      </Sheet>
+
+      {/* <AnimatePresence>
         {activeItem && (
           <div className='fixed top-0 left-0 right-0 bottom-0 overflow-scroll pt-12 w-screen max-w-screen h-screen flex items-end'>
             <motion.div
@@ -53,7 +65,7 @@ export default function Search() {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </>
   );
 }

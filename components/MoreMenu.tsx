@@ -42,7 +42,7 @@ export default function MoreMenu() {
   return (
     <AnimatePresence>
       {moreMenuItem && (
-        <div className='fixed top-0 left-0 right-0 bottom-0 flex flex-col justify-end overflow-scroll p-5 z-50'>
+        <div className='fixed top-0 left-0 right-0 bottom-0 flex flex-col justify-end overflow-scroll p-5 z-[99999999]'>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

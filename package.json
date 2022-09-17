@@ -12,14 +12,16 @@
   "dependencies": {
     "axios": "^0.27.2",
     "clsx": "^1.2.1",
+    "embla-carousel-react": "^7.0.3",
     "framer-motion": "^6.5.1",
     "jotai": "^1.7.8",
     "moment": "^2.29.4",
     "mta-realtime-subway-departures": "^1.2.1",
     "next": "12.1.0",
     "next-offline": "^5.0.5",
-    "react": "17.0.2",
+    "react": "^18.2.0",
     "react-dom": "17.0.2",
+    "react-modal-sheet": "^1.5.2",
     "react-moment": "^1.1.2"
   },
   "devDependencies": {

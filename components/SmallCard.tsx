@@ -11,6 +11,7 @@ import {
 import AlertIcon from './icons/AlertIcon';
 import ElevatorIcon from './icons/ElevatorIcon';
 import EscalatorIcon from './icons/EscalatorIcon';
+import RouteIndicator from './RouteIndicator';
 
 export default function SmallCard({ item, i }: { item: any; i: number }) {
   const [, setView] = useAtom(viewAtom);
@@ -44,8 +45,6 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
 
   return (
     <motion.div
-      // initial={{ scale: slide === i ? 1.1 : 1 }}
-      // animate={{ scale: slide === i ? 1 : 1 }}
       whileTap={{ scale: 0.98 }}
       className='bg-white px-6 py-5 rounded-[30px] cursor-pointer'
     >
@@ -56,12 +55,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
         <div className='flex gap-2 items-end'>
           <div className='flex gap-1 flex-wrap flex-1'>
             {lines.map((line: string) => (
-              <div
-                key={line}
-                className='w-6 h-6 rounded-full bg-black text-[14px] font-bold flex items-center justify-center'
-              >
-                {line}
-              </div>
+              <RouteIndicator id={line} small key={line} />
             ))}
           </div>
           <div className='flex gap-1'>
