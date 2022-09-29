@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { motion, useScroll } from 'framer-motion';
+import { AnimatePresence, motion, useScroll } from 'framer-motion';
 import { useAtom } from 'jotai';
 import { loadDefaultErrorComponents } from 'next/dist/server/load-components';
 import { useEffect, useRef, useState } from 'react';
@@ -91,104 +91,43 @@ export default function FullCard({
     return dest.name;
   }
 
-  const totalInactive = accOutages?.filter(
-    (o: any) => o.station === item.station
-  ).length;
-
-  const lines = item.trainno
-    ? item.trainno.split('/')
-    : Object.keys(item.routes);
-
   const equipment = accData[item.station ? item.station : item.name]?.equipment;
 
-  const [moreMenuItem, setMoreMenuItem] = useAtom(moreMenuItemAtom);
-  const [moreMenuTrainNo, setMoreMenuTrainNo] = useAtom(moreMenuTrainNoAtom);
-  function handleToggleMoreMenu() {
-    setMoreMenuItem(item.station ? item.station : item.name);
-    setMoreMenuTrainNo(
-      item.trainno ? item.trainno : Object.keys(item.routes).join('/')
-    );
-  }
-
   const card = useRef(null);
-  const top = useRef<any>(null);
-  const { scrollYProgress } = useScroll({
+  const { scrollY } = useScroll({
     container: card,
   });
-
-  const [animating, setAnimating] = useState(true);
   const [scrollPos, setScrollPos] = useState(0);
 
   useEffect(() => {
-    if (animating) return;
-    scrollYProgress.onChange((progress) => {
+    scrollY.onChange((progress) => {
       setScrollPos(progress);
     });
   }),
-    [scrollYProgress];
+    [scrollY];
 
   return (
     <>
       <motion.div
         onAnimationComplete={() => {
-          setAnimating(false);
           setScrollPos(0);
         }}
         className={clsx(
-          'bg-white relative w-screen flex-shrink-0 grid snap-center origin-top overflow-scroll h-full no-scrollbar overscroll-none',
-          overlayStyle ? ' rounded-t-[40px]' : ' rounded-[50px]'
+          'bg-white relative w-screen flex-shrink-0 grid content-start snap-center origin-top overflow-scroll h-full no-scrollbar overscroll-none',
+          overlayStyle ? ' rounded-t-[36px]' : ' rounded-[36px]'
         )}
         id={'slide-' + i}
         ref={card}
       >
-        <div className='pt-3 pb-8 px-8 grid gap-8 content-start'>
-          <div
-            className='grid gap-4 content-start top-0 pt-6 overflow-hidden'
-            ref={top}
-          >
-            <div
-              className='absolute py-4 px-2 top-4 right-7 transition'
-              onClick={() => handleToggleMoreMenu()}
-            >
-              <MoreMenuIcon />
-            </div>
-            <div
-              className={clsx(
-                'text-black font-extrabold text-[46px] leading-[100%] origin-top-left transition duration-500 mr-10'
-              )}
-            >
-              {item.station ? item.station : item.name}
-            </div>
-            <div className='flex justify-between items-start gap-4'>
-              <div className='flex gap-2 flex-wrap'>
-                {lines.map((line: string, i: number) => (
-                  <RouteIndicator id={line} key={line} />
-                ))}
-              </div>
-              {equipment && (
-                <div className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition'>
-                  {totalInactive > 0 ? (
-                    <AlertIcon color='#c5c5c5' />
-                  ) : (
-                    <TickIcon color='#000000' />
-                  )}
-                  <span
-                    className={clsx(
-                      'transition',
-                      totalInactive > 0 ? 'text-[#C5C5C5]' : 'text-[#000000]'
-                    )}
-                  >
-                    {totalInactive > 0
-                      ? totalInactive + ' Inactive'
-                      : 'All Active'}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className='grid gap-3'>
-            {equipment &&
-              equipment.map((equipment: any) => {
+        <Heading
+          item={item}
+          scrollPos={scrollPos}
+          overlayStyle={overlayStyle}
+        />
+        {equipment && (
+          <div className='pt-3 pb-8 px-8 grid gap-8 content-start'>
+            <div className='grid gap-3'>
+              {equipment.map((equipment: any) => {
                 const outage = accOutages?.find(
                   (o: any) => o.equipment === equipment.equipmentno
                 );
@@ -197,13 +136,19 @@ export default function FullCard({
                     key={equipment.equipmentno}
                     className={clsx(
                       'flex items-center rounded-[26px] min-h-[72px] p-4 gap-3',
-                      !outage ? 'bg-[#000000]' : 'bg-[#C5C5C5]'
+                      !outage
+                        ? 'bg-[#EBF0F4] text-[#202020]'
+                        : 'bg-[#E68C79] text-white'
                     )}
                   >
-                    {equipment.equipmenttype === 'EL' && <ElevatorIcon />}
-                    {equipment.equipmenttype === 'ES' && <EscalatorIcon />}
+                    {equipment.equipmenttype === 'EL' && (
+                      <ElevatorIcon stroke={!outage ? '#202020' : '#ffffff'} />
+                    )}
+                    {equipment.equipmenttype === 'ES' && (
+                      <EscalatorIcon stroke={!outage ? '#202020' : '#ffffff'} />
+                    )}
                     <div className='grid gap-2 flex-1 '>
-                      <div className='capitalize text-[15px] font-medium tracking-wide leading-tight'>
+                      <div className='capitalize text-[15px] font-semibold leading-tight'>
                         {equipment.shortdescription}
                         {outage && ' (' + outage.reason + ')'}
                       </div>
@@ -228,8 +173,8 @@ export default function FullCard({
                     </div>
                     <div
                       className={clsx(
-                        'text-[14px] font-semibold tracking-wide uppercase bg-white rounded-full leading-[100%] py-1 px-2',
-                        !outage ? 'text-[#000000]' : 'text-[#C5C5C5]'
+                        'text-[14px] font-bold uppercase bg-white rounded-full leading-[100%] py-1 px-2',
+                        !outage ? 'text-[#000000]' : 'text-[#E68C79]'
                       )}
                     >
                       {!outage ? 'Active' : 'Inactive'}
@@ -237,58 +182,191 @@ export default function FullCard({
                   </div>
                 );
               })}
+            </div>
           </div>
-        </div>
+        )}
         <div
           className={clsx(
-            'bg-[#000000] p-8 rounded-t-[40px] max-w-full grid gap-3 top-0 relative',
+            'p-8 pt-3 rounded-t-[40px] max-w-full grid gap-3 top-0 relative',
             !overlayStyle && 'rounded-b-[50px]'
           )}
         >
-          {stopData &&
-            stopData
-              .filter(
-                (t: any) =>
-                  t.estimated_current_stop_arrival_time * 1000 > Date.now()
-              )
-              .map((trip: any) => {
-                const timeUntil = Math.round(
-                  (trip.estimated_current_stop_arrival_time * 1000 -
-                    Date.now()) /
-                    1000 /
-                    60
-                );
-                return (
-                  <div
-                    key={trip.id}
-                    className='flex gap-4 items-center w-full overflow-hidden'
-                  >
-                    <RouteIndicator id={trip.route_id} small />
-                    <div className='flex-1 overflow-hidden whitespace-nowrap text-ellipsis text-[16px] font-medium tracking-wider'>
-                      to {findDest(trip.destination_stop)}
-                    </div>
-                    <div className='w-20 flex justify-end'>
-                      {timeUntil > 0 && (
-                        <div className='flex gap-2 items-baseline'>
+          <AnimatePresence>
+            {stopData &&
+              stopData
+                .filter(
+                  (t: any) =>
+                    t.estimated_current_stop_arrival_time * 1000 > Date.now()
+                )
+                .map((trip: any, i) => {
+                  const timeUntil = Math.round(
+                    (trip.estimated_current_stop_arrival_time * 1000 -
+                      Date.now()) /
+                      1000 /
+                      60
+                  );
+                  return (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 * i }}
+                      key={trip.id}
+                      className='flex gap-4 items-center w-full overflow-hidden text-[#202020]'
+                    >
+                      <RouteIndicator id={trip.route_id} small />
+                      <div className='flex-1 overflow-hidden whitespace-nowrap text-ellipsis text-[16px] font-semibold'>
+                        to {findDest(trip.destination_stop)}
+                      </div>
+                      <div className='w-20 flex justify-end'>
+                        {timeUntil > 0 && (
+                          <div className='flex gap-[6px] items-baseline'>
+                            <div className='text-[22px] font-bold'>
+                              {timeUntil}
+                            </div>
+                            <div className='text-[16px] font-medium'>min</div>
+                          </div>
+                        )}
+                        {timeUntil === 0 && (
                           <div className='text-[22px] font-bold tracking-wide'>
-                            {timeUntil}
+                            Now
                           </div>
-                          <div className='text-[16px] font-medium tracking-wider'>
-                            min
-                          </div>
-                        </div>
-                      )}
-                      {timeUntil === 0 && (
-                        <div className='text-[22px] font-bold tracking-wide'>
-                          Now
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+          </AnimatePresence>
         </div>
       </motion.div>
+    </>
+  );
+}
+
+function Heading({
+  item,
+  scrollPos,
+  overlayStyle,
+}: {
+  item: any;
+  scrollPos: number;
+  overlayStyle: boolean;
+}) {
+  const [accOutages] = useAtom(accOutagesAtom);
+  const [moreMenuItem, setMoreMenuItem] = useAtom(moreMenuItemAtom);
+  const [moreMenuTrainNo, setMoreMenuTrainNo] = useAtom(moreMenuTrainNoAtom);
+
+  const [accData, setAccData] = useAtom(accDataAtom);
+  function handleToggleMoreMenu() {
+    setMoreMenuItem(item.station ? item.station : item.name);
+    setMoreMenuTrainNo(
+      item.trainno ? item.trainno : Object.keys(item.routes).join('/')
+    );
+  }
+  const equipment = accData[item.station ? item.station : item.name]?.equipment;
+
+  const totalInactive = accOutages?.filter(
+    (o: any) => o.station === item.station
+  ).length;
+
+  const lines = item.trainno
+    ? item.trainno.split('/')
+    : Object.keys(item.routes);
+  const top = useRef<any>(null);
+
+  return (
+    <>
+      <div
+        className={clsx(
+          'top-0 px-8 sticky h-0 w-full transition duration-[0.6s] z-10',
+          scrollPos > 120 ? 'translate-y-0' : 'translate-y-[-400px]'
+        )}
+        ref={top}
+      >
+        <div className='bg-white w-full pt-[14px] pb-1 relative grid gap-[6px] content-start '>
+          <div
+            className='absolute py-4 px-2 top-2 right-0 transition'
+            onClick={() => handleToggleMoreMenu()}
+          >
+            <MoreMenuIcon />
+          </div>
+          <div
+            className={clsx(
+              'text-black font-extrabold text-[24px] leading-[100%] origin-top-left transition duration-500 mr-10'
+            )}
+          >
+            {item.station ? item.station : item.name}
+          </div>
+          <div className='flex justify-between items-start gap-2'>
+            <div className='flex gap-1 flex-wrap'>
+              {lines.map((line: string, i: number) => (
+                <RouteIndicator id={line} key={line} extraSmall />
+              ))}
+            </div>
+            {equipment && (
+              <div className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition scale-[0.7] origin-top-right'>
+                {totalInactive > 0 ? (
+                  <AlertIcon color='#E68C79' />
+                ) : (
+                  <TickIcon color='#000000' />
+                )}
+                <span
+                  className={clsx(
+                    'transition',
+                    totalInactive > 0 ? 'text-[#E68C79]' : 'text-[#000000]'
+                  )}
+                >
+                  {totalInactive > 0 && totalInactive}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <div
+        className={clsx(
+          'grid gap-4 mx-8 content-start top-0 pb-8 relative',
+          overlayStyle ? 'pt-2' : 'pt-9'
+        )}
+        ref={top}
+      >
+        <div
+          className='absolute py-4 px-2 top-4 right-0 transition'
+          onClick={() => handleToggleMoreMenu()}
+        >
+          <MoreMenuIcon />
+        </div>
+        <div
+          className={clsx(
+            'text-black font-extrabold text-[46px] leading-[100%] origin-top-left transition duration-500 mr-10'
+          )}
+        >
+          {item.station ? item.station : item.name}
+        </div>
+        <div className='flex justify-between items-start gap-4'>
+          <div className='flex gap-2 flex-wrap'>
+            {lines.map((line: string, i: number) => (
+              <RouteIndicator id={line} key={line} />
+            ))}
+          </div>
+          {equipment && (
+            <div className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition'>
+              {totalInactive > 0 ? (
+                <AlertIcon color='#E68C79' />
+              ) : (
+                <TickIcon color='#000000' />
+              )}
+              <span
+                className={clsx(
+                  'transition',
+                  totalInactive > 0 ? 'text-[#E68C79]' : 'text-[#000000]'
+                )}
+              >
+                {totalInactive > 0 ? totalInactive + ' Inactive' : 'All Active'}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 }

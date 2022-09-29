@@ -1,8 +1,9 @@
 import clsx from 'clsx';
+import useEmblaCarousel from 'embla-carousel-react';
 import { useAtom } from 'jotai';
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { UIEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Header from '../components/Header';
 import MoreMenu from '../components/MoreMenu';
 import Search from '../components/Search';
@@ -18,8 +19,6 @@ import {
   viewAtom,
 } from '../store/store';
 import { humanTimeAgo } from '../utils/human-time-ago';
-import useEmblaCarousel from 'embla-carousel-react';
-import { loadDefaultErrorComponents } from 'next/dist/server/load-components';
 
 const Home: NextPage = () => {
   const [accData, setAccData] = useAtom(accDataAtom);
@@ -109,7 +108,7 @@ const Home: NextPage = () => {
   };
 
   useEffect(() => {
-    setSlide(1);
+    setSlide(0);
     fetchData();
   }, [favourites]);
 
@@ -121,7 +120,7 @@ const Home: NextPage = () => {
     [lastUpdate];
 
   const [slide, setSlide] = useAtom(slideAtom);
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [activeSlide, setActiveSlide] = useState<number | null>(null);
 
   useEffect(() => {
     if (ref.current) ref.current.scrollLeft = window.innerWidth * slide;

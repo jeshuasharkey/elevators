@@ -23,14 +23,19 @@ export default function RouteIndicator({
   return (
     <div
       className={clsx(
-        'rounded-full font-bold flex items-center justify-center',
-        small ? 'w-6 h-6 text-[16px]' : 'w-8 h-8 text-[18px]'
+        'rounded-full font-bold flex items-center justify-center relative',
+        small
+          ? 'w-6 h-6 text-[16px]'
+          : extraSmall
+          ? 'w-5 h-5 text-[14px]'
+          : 'w-8 h-8 text-[18px]'
       )}
       style={{
         backgroundColor: route?.['color'],
         color: route?.['text_color'] || 'white',
       }}
     >
+      <div className='absolute bg-white/30 top-0 left-0 w-full h-full rounded-full'></div>
       {id}
     </div>
   );

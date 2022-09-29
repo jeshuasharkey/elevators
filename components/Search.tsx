@@ -35,6 +35,7 @@ export default function Search() {
 
       <Sheet isOpen={!!activeItem} onClose={() => handleClose()}>
         <Sheet.Container>
+          <Sheet.Header />
           <Sheet.Content>
             <FullCard item={activeItem} i={0} overlayStyle={true} />
           </Sheet.Content>
