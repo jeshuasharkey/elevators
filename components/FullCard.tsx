@@ -198,7 +198,7 @@ export default function FullCard({
                   (t: any) =>
                     t.estimated_current_stop_arrival_time * 1000 > Date.now()
                 )
-                .map((trip: any, i) => {
+                .map((trip: any, i: number) => {
                   const timeUntil = Math.round(
                     (trip.estimated_current_stop_arrival_time * 1000 -
                       Date.now()) /
