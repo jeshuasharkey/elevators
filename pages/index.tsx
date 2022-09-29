@@ -148,7 +148,7 @@ const Home: NextPage = () => {
   }, [emblaApi]);
 
   function getStop(name: string) {
-    return stops.find((i) => i.name === name);
+    return stops.find((i: any) => i.name === name);
   }
 
   return (
