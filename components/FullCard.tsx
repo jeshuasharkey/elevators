@@ -249,7 +249,7 @@ function Heading({
 }: {
   item: any;
   scrollPos: number;
-  overlayStyle: boolean;
+  overlayStyle?: boolean;
 }) {
   const [accOutages] = useAtom(accOutagesAtom);
   const [moreMenuItem, setMoreMenuItem] = useAtom(moreMenuItemAtom);
