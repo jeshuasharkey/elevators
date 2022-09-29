@@ -330,7 +330,10 @@ function Heading({
         ref={top}
       >
         <div
-          className='absolute py-4 px-2 top-4 right-0 transition'
+          className={clsx(
+            'absolute py-4 px-2 right-0 transition',
+            overlayStyle ? 'top-0' : 'top-4'
+          )}
           onClick={() => handleToggleMoreMenu()}
         >
           <MoreMenuIcon />

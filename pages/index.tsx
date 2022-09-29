@@ -23,7 +23,7 @@ import { humanTimeAgo } from '../utils/human-time-ago';
 const Home: NextPage = () => {
   const [accData, setAccData] = useAtom(accDataAtom);
   const [, setAccOutages] = useAtom(accOutagesAtom);
-  const [, setStops] = useAtom(stopsAtom);
+  const [stops, setStops] = useAtom(stopsAtom);
   const [, setRoutes] = useAtom(routesAtom);
   const [favourites, setFavourites] = useAtom(favouritesAtom);
   const [lastUpdate, setLastUpdate] = useState<any>();
@@ -147,6 +147,10 @@ const Home: NextPage = () => {
     }
   }, [emblaApi]);
 
+  function getStop(name: string) {
+    return stops.find((i) => i.name === name);
+  }
+
   return (
     <>
       <Head>
@@ -169,7 +173,11 @@ const Home: NextPage = () => {
                 ref={ref}
               >
                 {favourites.map((item, i) => (
-                  <SingleStation key={item} item={accData?.[item]} i={i} />
+                  <SingleStation
+                    key={item}
+                    item={accData?.[item] || getStop(item)}
+                    i={i}
+                  />
                 ))}
               </div>
             )}
@@ -180,7 +188,10 @@ const Home: NextPage = () => {
                     {favourites.map((item, i) => (
                       <div className='embla__slide' key={item}>
                         <pre className='text-black'></pre>
-                        <SingleStation item={accData?.[item]} i={i} />
+                        <SingleStation
+                          item={accData?.[item] || getStop(item)}
+                          i={i}
+                        />
                       </div>
                     ))}
                   </div>
