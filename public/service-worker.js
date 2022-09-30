@@ -28,6 +28,10 @@ self.addEventListener('fetch', function (event) {
   );
 });
 
+var version = 'v3'; // increase for new version
+var staticCacheName = version + '_pwa-static';
+var dynamicCacheName = version + '_pwa-dynamic';
+
 self.addEventListener('activate', function (event) {
   event.waitUntil(
     caches.keys().then(function (cacheNames) {
