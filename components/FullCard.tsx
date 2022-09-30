@@ -124,8 +124,13 @@ export default function FullCard({
           scrollPos={scrollPos}
           overlayStyle={overlayStyle}
         />
-        {equipment && (
-          <div className='pt-3 pb-8 px-8 grid gap-8 content-start'>
+        <div className='pt-3 pb-8 px-8 grid gap-8 content-start'>
+          {!equipment && (
+            <div className='text-[#D0D7DC] rounded-[20px] border-2 font-medium border-[#EBF0F4] p-5'>
+              Not an accessible station.
+            </div>
+          )}
+          {equipment && (
             <div className='grid gap-3'>
               {equipment.map((equipment: any) => {
                 const outage = accOutages?.find(
@@ -183,8 +188,8 @@ export default function FullCard({
                 );
               })}
             </div>
-          </div>
-        )}
+          )}
+        </div>
         <div
           className={clsx(
             'p-8 pt-3 rounded-t-[40px] max-w-full grid gap-3 top-0 relative',
@@ -265,8 +270,12 @@ function Heading({
   const equipment = accData[item.station ? item.station : item.name]?.equipment;
 
   const totalInactive = accOutages?.filter(
-    (o: any) => o.station === item.station
+    (o: any) =>
+      o.station ===
+      (item.name?.replace(' - ', '-') || item.station?.replace(' - ', '-'))
   ).length;
+
+  console.log(accOutages);
 
   const lines = item.trainno
     ? item.trainno.split('/')

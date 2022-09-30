@@ -63,7 +63,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
               <div
                 className={clsx(
                   'flex gap-1 rounded-full items-center py-[2px] px-2 text-[16px] leading-[100%]',
-                  totalInactiveEs > 0 ? 'bg-[#C5C5C5]' : 'bg-[#BD8A5B]'
+                  totalInactiveEs > 0 ? 'bg-[#BD8A5B]' : 'bg-[#C5C5C5]'
                 )}
               >
                 {totalEs}
@@ -74,7 +74,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
               <div
                 className={clsx(
                   'flex gap-1 rounded-full items-center py-[2px] px-2 text-[16px] leading-[100%]',
-                  totalInactiveEl > 0 ? 'bg-[#C5C5C5]' : 'bg-[#BD8A5B]'
+                  totalInactiveEl > 0 ? 'bg-[#BD8A5B]' : 'bg-[#C5C5C5]'
                 )}
               >
                 {totalEl}
@@ -82,7 +82,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
               </div>
             )}
             {(totalInactiveEs > 0 || totalInactiveEl > 0) && (
-              <AlertIcon color='#c5c5c5' className='w-6' />
+              <AlertIcon color='#BD8A5B' className='w-6' />
             )}
           </div>
         </div>

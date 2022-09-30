@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useRef, useState } from 'react';
 import { searchAtom, viewAtom } from '../store/store';
 import ListViewIcon from './icons/ListViewIcon';
@@ -60,13 +60,11 @@ export default function Header({ refresh }: { refresh: () => void }) {
             <RefreshIcon />
           </motion.div>
           <div
-            className={clsx(
-              'p-1',
-              view === 'list' ? 'opacity-30' : 'cursor-pointer'
-            )}
-            onClick={() => setView('list')}
+            className={clsx('p-1 cursor-pointer w-7 flex justify-center')}
+            onClick={() => setView(view === 'list' ? 'full' : 'list')}
           >
-            <ListViewIcon />
+            {view === 'full' && <ListViewIcon />}
+            {view === 'list' && <CrossIcon />}
           </div>
         </>
       )}

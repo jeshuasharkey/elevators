@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { searchAtom, stopsAtom } from '../store/store';
 import { useAtom } from 'jotai';
-import SmallCard from './SmallCard';
-import FullCard from './FullCard';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import Sheet from 'react-modal-sheet';
+import { searchAtom, stopsAtom } from '../store/store';
+import FullCard from './FullCard';
+import SmallCard from './SmallCard';
 
 export default function Search() {
   const [search, setSearch] = useAtom(searchAtom);
@@ -23,6 +22,20 @@ export default function Search() {
     setActiveItem(null);
   }
 
+  useEffect(() => {
+    // click listener detect class
+    const handleClick = (e: any) => {
+      if (e.target.classList.contains('react-modal-sheet-backdrop')) {
+        handleClose();
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  }, []);
+
   return (
     <>
       <div className='flex flex-1 snap-center w-screen overflow-scroll flex-col gap-3 p-5 pt-0'>
@@ -40,7 +53,6 @@ export default function Search() {
             <FullCard item={activeItem} i={0} overlayStyle={true} />
           </Sheet.Content>
         </Sheet.Container>
-
         <Sheet.Backdrop />
       </Sheet>
 
