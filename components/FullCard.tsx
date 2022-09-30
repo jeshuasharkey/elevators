@@ -15,6 +15,7 @@ import AlertIcon from './icons/AlertIcon';
 import ElevatorIcon from './icons/ElevatorIcon';
 import EscalatorIcon from './icons/EscalatorIcon';
 import MoreMenuIcon from './icons/MoreMenuIcon';
+import NotAccessibleIcon from './icons/NotAccessibleIcon';
 import TickIcon from './icons/TickIcon';
 import RouteIndicator from './RouteIndicator';
 
@@ -127,8 +128,9 @@ export default function FullCard({
         />
         <div className='pt-3 pb-8 px-8 grid gap-8 content-start'>
           {!equipment && (
-            <div className='text-[#D0D7DC] rounded-[20px] border-2 font-medium border-[#EBF0F4] p-5 text-[16px]'>
-              Not an accessible station.
+            <div className='text-[#D0D7DC] rounded-[20px] border-2 font-medium border-[#EBF0F4] p-5 text-[16px] flex gap-3'>
+              <NotAccessibleIcon />
+              Not an accessible station
             </div>
           )}
           {equipment && (
