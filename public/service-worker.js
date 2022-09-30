@@ -1,5 +1,5 @@
 // use a cacheName for cache versioning
-var cacheName = 'v1.02:static';
+var cacheName = 'v1.03:static';
 
 // during the install phase you usually want to cache static assets
 self.addEventListener('install', function (e) {
@@ -28,7 +28,7 @@ self.addEventListener('fetch', function (event) {
   );
 });
 
-var version = 'v3'; // increase for new version
+var version = 'v3.001'; // increase for new version
 var staticCacheName = version + '_pwa-static';
 var dynamicCacheName = version + '_pwa-dynamic';
 
