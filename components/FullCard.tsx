@@ -106,6 +106,8 @@ export default function FullCard({
   }),
     [scrollY];
 
+  return null;
+
   return (
     <>
       <motion.div
