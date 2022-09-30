@@ -268,7 +268,8 @@ function Heading({
       item.trainno ? item.trainno : Object.keys(item.routes).join('/')
     );
   }
-  const equipment = accData[item.station ? item.station : item.name]?.equipment;
+  const equipment =
+    accData?.[item.station ? item.station : item.name]?.equipment;
 
   const totalInactive = accOutages?.filter(
     (o: any) =>
