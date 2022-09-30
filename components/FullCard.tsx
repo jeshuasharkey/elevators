@@ -91,7 +91,8 @@ export default function FullCard({
     return dest.name;
   }
 
-  const equipment = accData[item.station ? item.station : item.name]?.equipment;
+  const equipment =
+    accData?.[item.station ? item.station : item.name]?.equipment;
 
   const card = useRef(null);
   const { scrollY } = useScroll({
@@ -105,8 +106,6 @@ export default function FullCard({
     });
   }),
     [scrollY];
-
-  return null;
 
   return (
     <>

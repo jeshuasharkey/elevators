@@ -158,7 +158,7 @@ const Home: NextPage = () => {
         <link rel='manifest' href='manifest.json' />
         <title>ELEVATORS</title>
       </Head>
-      <div className='bg-[#EBF0F4] h-screen w-screen text-white flex flex-col text-[12px]'>
+      <div className='bg-blue-400 h-screen w-screen text-white flex flex-col text-[12px]'>
         <Header refresh={() => fetchData()} />
         {search && <Search />}
         {!search && (
