@@ -26,6 +26,7 @@ const Home: NextPage = () => {
   const [stops, setStops] = useAtom(stopsAtom);
   const [, setRoutes] = useAtom(routesAtom);
   const [favourites, setFavourites] = useAtom(favouritesAtom);
+  const [stopData, setStopData] = useState([]);
   const [lastUpdate, setLastUpdate] = useState<any>();
   const [timeAgo, setTimeAgo] = useState<any>();
   const [view, setView] = useAtom(viewAtom);
@@ -49,20 +50,20 @@ const Home: NextPage = () => {
       .then((response) => response.json())
       .then((data: any) => {
         setLastUpdate(Date.now());
-        const newData: any = {};
+        const newData: any[] = [];
         data.forEach((item: any) => {
-          const station = item.station.replace('-', ' - ');
-          const exsits = !!newData[station];
-          if (exsits) {
-            newData[station].equipment.push(item);
+          const stationId = item.elevatorsgtfsstopid;
+          const exists = newData.findIndex((i) => i.stationId === stationId);
+          if (exists > -1) {
+            newData[exists].equipment.push(item);
           } else {
-            newData[station] = {
-              station: station,
+            newData.push({
+              station: item.station,
               borough: item.borough,
               trainno: item.trainno,
-              stationId: item.elevatorsgtfsstopid,
+              stationId,
               equipment: [item],
-            };
+            });
           }
         });
         setAccData(newData);
@@ -91,7 +92,7 @@ const Home: NextPage = () => {
     fetch(`https://www.goodservice.io/api/stops`)
       .then((response) => response.json())
       .then((data: any) => {
-        setStops(data.stops);
+        setStopData(data.stops);
       })
       .catch((error) => {
         alert(error);
@@ -106,6 +107,22 @@ const Home: NextPage = () => {
         alert(error);
       });
   };
+
+  //map accData to stops
+  useEffect(() => {
+    if (!accData || !stopData) return;
+    stopData.map((stop: any) => {
+      const accInfo = accData?.find(
+        (acc: any) =>
+          acc.stationId.includes(stop.id) &&
+          Object.keys(stop.routes).some((route) => acc.trainno.includes(route))
+      );
+      stop.equipment = accInfo?.equipment;
+      return stop;
+    });
+    setStops(stopData);
+    console.log(stopData);
+  }, [accData, stopData]);
 
   useEffect(() => {
     setSlide(0);
@@ -132,6 +149,7 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (emblaApi) {
       emblaApi.scrollTo(slide, true);
+      setActiveSlide(slide);
     }
   }, [slide, emblaApi]);
 
@@ -147,15 +165,22 @@ const Home: NextPage = () => {
     }
   }, [emblaApi]);
 
-  function getStop(name: string) {
+  function getStop(id: string) {
     if (!stops) return;
-    return stops?.find((i: any) => i.name === name);
+    const stop = stops?.find((i: any) => i.id === id);
+    return stop;
   }
 
   return (
     <>
       <Head>
         <link rel='manifest' href='manifest.json' />
+        <meta name='apple-mobile-web-app-status-bar-style' content='default' />
+        <meta
+          name='viewport'
+          content='width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover'
+        />
+        <meta name='apple-mobile-web-app-capable' content='yes' />
         <title>ELEVATORS</title>
       </Head>
       <div className='bg-[#EBF0F4] h-screen w-screen text-white flex flex-col text-[12px]'>
@@ -174,11 +199,7 @@ const Home: NextPage = () => {
                 ref={ref}
               >
                 {favourites.map((item, i) => (
-                  <SingleStation
-                    key={item}
-                    item={accData?.[item] || getStop(item)}
-                    i={i}
-                  />
+                  <SingleStation key={item} item={getStop(item)} i={i} />
                 ))}
               </div>
             )}
@@ -189,10 +210,7 @@ const Home: NextPage = () => {
                     {favourites.map((item, i) => (
                       <div className='embla__slide' key={item}>
                         <pre className='text-black'></pre>
-                        <SingleStation
-                          item={accData?.[item] || getStop(item)}
-                          i={i}
-                        />
+                        <SingleStation item={getStop(item)} i={i} />
                       </div>
                     ))}
                   </div>

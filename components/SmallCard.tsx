@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
 import { useAtom } from 'jotai';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   viewAtom,
   slideAtom,
@@ -19,25 +19,36 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
   const [accOutages] = useAtom(accOutagesAtom);
   const [slide] = useAtom(slideAtom);
 
-  const totalEl = accData?.[
-    item.station ? item.station : item.name
-  ]?.equipment.filter((e: any) => e.equipmenttype === 'EL').length;
+  const totalEl = item?.equipment?.filter(
+    (e: any) => e.equipmenttype === 'EL'
+  ).length;
 
-  const totalEs = accData?.[
-    item.station ? item.station : item.name
-  ]?.equipment.filter((e: any) => e.equipmenttype === 'ES').length;
+  const totalEs = item?.equipment?.filter(
+    (e: any) => e.equipmenttype === 'ES'
+  ).length;
+
+  totalEs;
 
   const totalInactiveEl = accOutages?.filter(
     (o: any) =>
-      o.station === (item.station ? item.station : item.name) &&
-      o.equipmenttype === 'EL'
+      item?.equipment
+        ?.map((e: any) => {
+          return e.equipmentno;
+        })
+        .includes(o.equipment) && o.equipmenttype === 'EL'
   ).length;
 
   const totalInactiveEs = accOutages?.filter(
     (o: any) =>
-      o.station === (item.station ? item.station : item.name) &&
-      o.equipmenttype === 'ES'
+      o.equipment === item.name.replace(' - ', '-') && o.equipmenttype === 'ES'
   ).length;
+
+  useEffect(() => {
+    if (!item) return;
+    const equip = item?.equipment?.map((e: any) => {
+      return e.equipmentno;
+    });
+  }, [item]);
 
   const lines = item.trainno
     ? item.trainno.split('/')
@@ -50,7 +61,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
     >
       <div className='grid gap-2'>
         <div className='text-black font-extrabold text-[24px] leading-[100%]'>
-          {item.station ? item.station : item.name}
+          {item.name}
         </div>
         <div className='flex gap-2 items-end'>
           <div className='flex gap-1 flex-wrap flex-1'>

@@ -32,7 +32,6 @@ export default function FullCard({
 
   const [stops] = useAtom(stopsAtom);
   const [stopData, setStopData] = useState<any>(null);
-  const [accData, setAccData] = useAtom(accDataAtom);
 
   function fetchData() {
     const id = item.stationId ? item.stationId : item.id;
@@ -92,9 +91,6 @@ export default function FullCard({
     return dest.name;
   }
 
-  const equipment =
-    accData?.[item.station ? item.station : item.name]?.equipment;
-
   const card = useRef(null);
   const { scrollY } = useScroll({
     container: card,
@@ -127,15 +123,15 @@ export default function FullCard({
           overlayStyle={overlayStyle}
         />
         <div className='pt-3 pb-8 px-8 grid gap-8 content-start'>
-          {!equipment && (
-            <div className='text-[#D0D7DC] rounded-[20px] border-2 font-medium border-[#EBF0F4] p-5 text-[16px] flex gap-3'>
+          {!item.equipment && (
+            <div className='text-[#D0D7DC] rounded-[26px] border-2 font-medium border-[#EBF0F4] p-5 text-[16px] flex gap-3'>
               <NotAccessibleIcon />
               Not an accessible station
             </div>
           )}
-          {equipment && (
+          {item.equipment && (
             <div className='grid gap-3'>
-              {equipment.map((equipment: any) => {
+              {item.equipment.map((equipment: any) => {
                 const outage = accOutages?.find(
                   (o: any) => o.equipment === equipment.equipmentno
                 );
@@ -217,7 +213,7 @@ export default function FullCard({
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 * i }}
+                      transition={{ delay: 0.08 * i }}
                       key={trip.id}
                       className='flex gap-4 items-center w-full overflow-hidden text-[#202020]'
                     >
@@ -261,25 +257,17 @@ function Heading({
 }) {
   const [accOutages] = useAtom(accOutagesAtom);
   const [moreMenuItem, setMoreMenuItem] = useAtom(moreMenuItemAtom);
-  const [moreMenuTrainNo, setMoreMenuTrainNo] = useAtom(moreMenuTrainNoAtom);
 
   const [accData, setAccData] = useAtom(accDataAtom);
   function handleToggleMoreMenu() {
-    setMoreMenuItem(item.station ? item.station : item.name);
-    setMoreMenuTrainNo(
-      item.trainno ? item.trainno : Object.keys(item.routes).join('/')
-    );
+    setMoreMenuItem(item);
   }
-  const equipment =
-    accData?.[item.station ? item.station : item.name]?.equipment;
 
   const totalInactive = accOutages?.filter(
     (o: any) =>
       o.station ===
       (item.name?.replace(' - ', '-') || item.station?.replace(' - ', '-'))
   ).length;
-
-  console.log(accOutages);
 
   const lines = item.trainno
     ? item.trainno.split('/')
@@ -315,7 +303,7 @@ function Heading({
                 <RouteIndicator id={line} key={line} extraSmall />
               ))}
             </div>
-            {equipment && (
+            {item.equipment && (
               <div className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition scale-[0.7] origin-top-right'>
                 {totalInactive > 0 ? (
                   <AlertIcon color='#E68C79' />
@@ -364,7 +352,7 @@ function Heading({
               <RouteIndicator id={line} key={line} />
             ))}
           </div>
-          {equipment && (
+          {item.equipment && (
             <div className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition'>
               {totalInactive > 0 ? (
                 <AlertIcon color='#E68C79' />

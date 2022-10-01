@@ -50,6 +50,12 @@ input::-webkit-inner-spin-button {
 
 .react-modal-sheet-backdrop {
   pointer-events: initial !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.3) 60px
+  );
 }
 .react-modal-sheet-container {
   border-radius: 40px 40px 0 0 !important;
