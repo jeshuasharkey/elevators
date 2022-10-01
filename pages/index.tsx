@@ -175,12 +175,12 @@ const Home: NextPage = () => {
     <>
       <Head>
         <link rel='manifest' href='manifest.json' />
-        <meta name='apple-mobile-web-app-status-bar-style' content='default' />
-        <meta
+        {/* <meta name='apple-mobile-web-app-status-bar-style' content='default' /> */}
+        {/* <meta
           name='viewport'
           content='width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover'
         />
-        <meta name='apple-mobile-web-app-capable' content='yes' />
+        <meta name='apple-mobile-web-app-capable' content='yes' /> */}
         <title>ELEVATORS</title>
       </Head>
       <div className='bg-[#EBF0F4] h-screen w-screen text-white flex flex-col text-[12px]'>
