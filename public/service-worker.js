@@ -1,4 +1,4 @@
-var version = 'v3.004'; // increase for new version
+var version = 'v3.005'; // increase for new version
 
 // during the install phase you usually want to cache static assets
 self.addEventListener('install', function (e) {

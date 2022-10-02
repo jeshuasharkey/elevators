@@ -47,7 +47,7 @@ export default function MoreMenu() {
           <motion.div
             initial={{ y: '110%' }}
             animate={{ y: 0 }}
-            exit={{ y: '110%' }}
+            exit={{ y: '140%' }}
             transition={{ type: 'spring', stiffness: 360, damping: 24 }}
             className='z-10 relative flex flex-col gap-5 text-black text-[18px] font-semibold'
           >

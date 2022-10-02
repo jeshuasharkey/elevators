@@ -2,7 +2,7 @@ import { useAtom } from 'jotai';
 import { useRef, useState } from 'react';
 import { BottomSheet, BottomSheetRef } from 'react-spring-bottom-sheet';
 // import 'react-spring-bottom-sheet/dist/style.css';
-import { searchAtom, stopsAtom } from '../store/store';
+import { moreMenuItemAtom, searchAtom, stopsAtom } from '../store/store';
 import FullCard from './FullCard';
 import MoreMenu from './MoreMenu';
 import SmallCard from './SmallCard';
@@ -10,6 +10,7 @@ import SmallCard from './SmallCard';
 export default function Search() {
   const [search, setSearch] = useAtom(searchAtom);
   const [stops, setStops] = useAtom(stopsAtom);
+  const [moreMenuItem, setMoreMenuItem] = useAtom(moreMenuItemAtom);
   const [activeItem, setActiveItem] = useState(null);
 
   const sheetRef = useRef<BottomSheetRef>();
@@ -24,6 +25,7 @@ export default function Search() {
 
   function handleClose() {
     setActiveItem(null);
+    setMoreMenuItem(null);
   }
 
   return (
