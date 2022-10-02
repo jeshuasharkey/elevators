@@ -52,6 +52,7 @@ export default function Search() {
         open={!!activeItem}
         onDismiss={handleClose}
         snapPoints={({ minHeight, maxHeight }) => [minHeight, maxHeight]}
+        expandOnContentDrag={true}
       >
         <FullCard item={activeItem} i={0} overlayStyle={true} />
         <MoreMenu />
