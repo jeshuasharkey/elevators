@@ -74,6 +74,7 @@ input::-webkit-inner-spin-button {
 
 .embla {
   overflow: hidden;
+  flex: 1;
 }
 .embla__container {
   display: flex;
