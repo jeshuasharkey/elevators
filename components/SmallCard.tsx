@@ -17,11 +17,11 @@ import RouteIndicator from './RouteIndicator';
 export default function SmallCard({
   item,
   i,
-  searchStyle,
+  searchStyle = false,
 }: {
   item: any;
   i: number;
-  searchStyle: boolean;
+  searchStyle?: boolean;
 }) {
   const [, setView] = useAtom(viewAtom);
   const [accData] = useAtom(accDataAtom);
