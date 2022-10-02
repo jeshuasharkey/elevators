@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
-import { useEffect, useState } from 'react';
-import { BottomSheet } from 'react-spring-bottom-sheet';
+import { useRef, useState } from 'react';
+import { BottomSheet, BottomSheetRef } from 'react-spring-bottom-sheet';
 // import 'react-spring-bottom-sheet/dist/style.css';
 import { searchAtom, stopsAtom } from '../store/store';
 import FullCard from './FullCard';
@@ -11,6 +11,8 @@ export default function Search() {
   const [search, setSearch] = useAtom(searchAtom);
   const [stops, setStops] = useAtom(stopsAtom);
   const [activeItem, setActiveItem] = useState(null);
+
+  const sheetRef = useRef<BottomSheetRef>();
 
   const results = stops?.filter((item: any) =>
     item?.name?.toUpperCase().includes(search.toUpperCase())
@@ -23,20 +25,6 @@ export default function Search() {
   function handleClose() {
     setActiveItem(null);
   }
-
-  // useEffect(() => {
-  //   // click listener detect class
-  //   const handleClick = (e: any) => {
-  //     if (e.target.classList.contains('react-modal-sheet-backdrop')) {
-  //       handleClose();
-  //     }
-  //   };
-
-  //   document.addEventListener('click', handleClick);
-  //   return () => {
-  //     document.removeEventListener('click', handleClick);
-  //   };
-  // }, []);
 
   return (
     <>
@@ -51,8 +39,9 @@ export default function Search() {
       <BottomSheet
         open={!!activeItem}
         onDismiss={handleClose}
-        snapPoints={({ minHeight, maxHeight }) => [minHeight, maxHeight]}
         expandOnContentDrag={true}
+        defaultSnap={({ maxHeight }) => maxHeight}
+        snapPoints={({ maxHeight }) => [maxHeight]}
       >
         <FullCard item={activeItem} i={0} overlayStyle={true} />
         <MoreMenu />
