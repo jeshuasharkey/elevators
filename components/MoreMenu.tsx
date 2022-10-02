@@ -1,15 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import React from 'react';
+import { useAtom } from 'jotai';
+import Link from 'next/link';
+import { favouritesAtom, moreMenuItemAtom } from '../store/store';
 import FavouriteIcon from './icons/FavouriteIcon';
 import NavigateIcon from './icons/NavigateIcon';
 import RemoveIcon from './icons/RemoveIcon';
-import { useAtom } from 'jotai';
-import {
-  favouritesAtom,
-  moreMenuItemAtom,
-  moreMenuTrainNoAtom,
-} from '../store/store';
-import Link from 'next/link';
 
 export default function MoreMenu() {
   const [moreMenuItem, setMoreMenuItem] = useAtom(moreMenuItemAtom);

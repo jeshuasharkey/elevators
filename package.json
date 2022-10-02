@@ -22,7 +22,8 @@
     "react": "^18.2.0",
     "react-dom": "17.0.2",
     "react-modal-sheet": "^1.5.2",
-    "react-moment": "^1.1.2"
+    "react-moment": "^1.1.2",
+    "react-spring-bottom-sheet": "^3.4.1"
   },
   "devDependencies": {
     "@types/moment": "^2.13.0",

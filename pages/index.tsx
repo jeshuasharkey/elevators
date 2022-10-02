@@ -239,7 +239,6 @@ const Home: NextPage = () => {
           </>
         )}
       </div>
-      <MoreMenu />
     </>
   );
 };

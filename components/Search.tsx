@@ -1,8 +1,10 @@
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react';
-import Sheet from 'react-modal-sheet';
+import { BottomSheet } from 'react-spring-bottom-sheet';
+// import 'react-spring-bottom-sheet/dist/style.css';
 import { searchAtom, stopsAtom } from '../store/store';
 import FullCard from './FullCard';
+import MoreMenu from './MoreMenu';
 import SmallCard from './SmallCard';
 
 export default function Search() {
@@ -22,31 +24,40 @@ export default function Search() {
     setActiveItem(null);
   }
 
-  useEffect(() => {
-    // click listener detect class
-    const handleClick = (e: any) => {
-      if (e.target.classList.contains('react-modal-sheet-backdrop')) {
-        handleClose();
-      }
-    };
+  // useEffect(() => {
+  //   // click listener detect class
+  //   const handleClick = (e: any) => {
+  //     if (e.target.classList.contains('react-modal-sheet-backdrop')) {
+  //       handleClose();
+  //     }
+  //   };
 
-    document.addEventListener('click', handleClick);
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  }, []);
+  //   document.addEventListener('click', handleClick);
+  //   return () => {
+  //     document.removeEventListener('click', handleClick);
+  //   };
+  // }, []);
 
   return (
     <>
       <div className='flex flex-1 snap-center w-screen overflow-scroll flex-col gap-3 p-5 pt-0'>
         {results?.map((item: any, i: number) => (
           <div key={item.id} onClick={() => handleSmallCardClick(item)}>
-            <SmallCard item={item} i={i} />
+            <SmallCard item={item} i={i} searchStyle={true} />
           </div>
         ))}
       </div>
 
-      <Sheet isOpen={!!activeItem} onClose={() => handleClose()}>
+      <BottomSheet
+        open={!!activeItem}
+        onDismiss={handleClose}
+        snapPoints={({ minHeight, maxHeight }) => [minHeight, maxHeight]}
+      >
+        <FullCard item={activeItem} i={0} overlayStyle={true} />
+        <MoreMenu />
+      </BottomSheet>
+
+      {/* <Sheet isOpen={!!activeItem} onClose={() => handleClose()}>
         <Sheet.Container>
           <Sheet.Header />
           <Sheet.Content>
@@ -54,7 +65,7 @@ export default function Search() {
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop />
-      </Sheet>
+      </Sheet> */}
 
       {/* <AnimatePresence>
         {activeItem && (

@@ -1,16 +1,15 @@
 import clsx from 'clsx';
 import { AnimatePresence, motion, useScroll } from 'framer-motion';
 import { useAtom } from 'jotai';
-import { loadDefaultErrorComponents } from 'next/dist/server/load-components';
 import { useEffect, useRef, useState } from 'react';
 import Moment from 'react-moment';
 import {
   accDataAtom,
   accOutagesAtom,
   moreMenuItemAtom,
-  moreMenuTrainNoAtom,
   stopsAtom,
 } from '../store/store';
+import FavIndicator from './FavIndicator';
 import AlertIcon from './icons/AlertIcon';
 import ElevatorIcon from './icons/ElevatorIcon';
 import EscalatorIcon from './icons/EscalatorIcon';
@@ -34,7 +33,7 @@ export default function FullCard({
   const [stopData, setStopData] = useState<any>(null);
 
   function fetchData() {
-    const id = item.stationId ? item.stationId : item.id;
+    const id = item?.stationId ? item?.stationId : item?.id;
     if (id.includes('/')) {
       const ids = id.split('/');
       let all: any[] = [];
@@ -123,15 +122,15 @@ export default function FullCard({
           overlayStyle={overlayStyle}
         />
         <div className='pt-3 pb-8 px-8 grid gap-8 content-start'>
-          {!item.equipment && (
+          {!item?.equipment && (
             <div className='text-[#D0D7DC] rounded-[26px] border-2 font-medium border-[#EBF0F4] p-5 text-[16px] flex gap-3'>
               <NotAccessibleIcon />
               Not an accessible station
             </div>
           )}
-          {item.equipment && (
+          {item?.equipment && (
             <div className='grid gap-3'>
-              {item.equipment.map((equipment: any) => {
+              {item?.equipment.map((equipment: any) => {
                 const outage = accOutages?.find(
                   (o: any) => o.equipment === equipment.equipmentno
                 );
@@ -266,12 +265,12 @@ function Heading({
   const totalInactive = accOutages?.filter(
     (o: any) =>
       o.station ===
-      (item.name?.replace(' - ', '-') || item.station?.replace(' - ', '-'))
+      (item?.name?.replace(' - ', '-') || item?.station?.replace(' - ', '-'))
   ).length;
 
-  const lines = item.trainno
-    ? item.trainno.split('/')
-    : Object.keys(item.routes);
+  const lines = item?.trainno
+    ? item?.trainno.split('/')
+    : Object.keys(item?.routes || {});
   const top = useRef<any>(null);
 
   return (
@@ -295,7 +294,7 @@ function Heading({
               'text-black font-extrabold text-[24px] leading-[100%] origin-top-left transition duration-500 mr-10'
             )}
           >
-            {item.station ? item.station : item.name}
+            {item?.station ? item?.station : item?.name}
           </div>
           <div className='flex justify-between items-start gap-2'>
             <div className='flex gap-1 flex-wrap'>
@@ -303,7 +302,7 @@ function Heading({
                 <RouteIndicator id={line} key={line} extraSmall />
               ))}
             </div>
-            {item.equipment && (
+            {item?.equipment && (
               <div className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition scale-[0.7] origin-top-right'>
                 {totalInactive > 0 ? (
                   <AlertIcon color='#E68C79' />
@@ -344,15 +343,16 @@ function Heading({
             'text-black font-extrabold text-[46px] leading-[100%] origin-top-left transition duration-500 mr-10'
           )}
         >
-          {item.station ? item.station : item.name}
+          {item?.station ? item?.station : item?.name}
         </div>
         <div className='flex justify-between items-start gap-4'>
-          <div className='flex gap-2 flex-wrap'>
+          <div className='flex gap-2 flex-wrap items-center'>
+            {overlayStyle && <FavIndicator item={item} />}
             {lines.map((line: string, i: number) => (
               <RouteIndicator id={line} key={line} />
             ))}
           </div>
-          {item.equipment && (
+          {item?.equipment && (
             <div className='text-black font-bold text-[20px] flex gap-2 items-center whitespace-nowrap transition'>
               {totalInactive > 0 ? (
                 <AlertIcon color='#E68C79' />

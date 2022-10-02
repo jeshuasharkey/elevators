@@ -8,12 +8,21 @@ import {
   accDataAtom,
   accOutagesAtom,
 } from '../store/store';
+import FavIndicator from './FavIndicator';
 import AlertIcon from './icons/AlertIcon';
 import ElevatorIcon from './icons/ElevatorIcon';
 import EscalatorIcon from './icons/EscalatorIcon';
 import RouteIndicator from './RouteIndicator';
 
-export default function SmallCard({ item, i }: { item: any; i: number }) {
+export default function SmallCard({
+  item,
+  i,
+  searchStyle,
+}: {
+  item: any;
+  i: number;
+  searchStyle: boolean;
+}) {
   const [, setView] = useAtom(viewAtom);
   const [accData] = useAtom(accDataAtom);
   const [accOutages] = useAtom(accOutagesAtom);
@@ -65,6 +74,7 @@ export default function SmallCard({ item, i }: { item: any; i: number }) {
         </div>
         <div className='flex gap-2 items-end'>
           <div className='flex gap-1 flex-wrap flex-1'>
+            {searchStyle && <FavIndicator item={item} small />}
             {lines.map((line: string) => (
               <RouteIndicator id={line} small key={line} />
             ))}
