@@ -9,7 +9,7 @@ export default function FavIndicator({
   small,
 }: {
   item: any;
-  small: boolean;
+  small?: boolean;
 }) {
   const [favourites, setFavourites] = useAtom(favouritesAtom);
 
